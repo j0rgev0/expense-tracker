@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Transaction } from '../../Interface/Transaction';
 import { AddTransactionButtonComponent } from '../add-transaction-button/add-transaction-button.component';
 import { getAllTransactions } from '../../Utils/manageTransaction';
+import { TransactionService } from '../../Services/transactions.service';
 
 @Component({
   selector: 'app-modal-form',
@@ -15,11 +16,20 @@ export class ModalFormComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   @Output() submitExpense = new EventEmitter<any>();
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private transactionService: TransactionService
+  ) {}
 
   transactionList: Transaction[] = [];
 
   ngOnInit(): void {
+    this.transactionService.transactions$.subscribe(transactions => {
+      this.transactionList = transactions;
+    });
+  }
+
+  loadTransactions() {
     this.transactionList = getAllTransactions();
   }
 
