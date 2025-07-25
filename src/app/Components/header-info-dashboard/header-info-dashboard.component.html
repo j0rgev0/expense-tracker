@@ -1,0 +1,12 @@
+<section>
+  <div class="flex justify-between items-center">
+    <span
+      class="text-7xl mt-6 font-bold"
+      [ngClass]="{ 'text-red-600': totalAmount < 0, 'text-green-600': totalAmount > 0 }"
+    >
+      {{ totalAmount | currency }}
+    </span>
+    <!-- graphics -->
+  </div>
+  <hr class="border-gray-500 mt-6 border-t-2" />
+</section>
