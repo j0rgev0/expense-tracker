@@ -1,72 +1,44 @@
 <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="flex-1 bg-white p-6 rounded-2xl shadow-lg w-full max-w-md max-h-[90vh] flex flex-col">
+    <div class="flex-1 bg-white p-6 rounded-2xl shadow-lg w-full max-w-md max-h-[80vh] flex flex-col">
         <h2 class="text-xl text-center font-semibold mb-4">Monthly Income</h2>
 
-        <div class="overflow-y-auto flex-grow space-y-4 pr-1">
-            <div *ngFor="let tx of transactionList"
-                class="relative border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-200 bg-white">
+        <div [ngSwitch]="modalMode" class="overflow-y-auto flex-grow space-y-4 pr-1">
+            <ng-container *ngSwitchCase="'view'">
+                <app-view-transactions />
+            </ng-container>
 
-                <button (click)="deleteTransaction(tx.id)" aria-label="Delete transaction"
-                    class="absolute top-2 right-2 w-7 h-7 flex items-center justify-center text-red-500 hover:text-red-700 focus:outline-none transition">
-                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18 17.94 6M18 18 6.06 6" />
-                    </svg>
-                </button>
-
-                <p class="text-sm text-gray-500 uppercase tracking-wide mb-2">{{ tx.category }}</p>
-
-                <div class="flex justify-between items-center mb-1">
-                    <p class="text-base font-medium text-gray-800">{{ tx.title }}</p>
-                    <p class="text-sm font-semibold"
-                        [ngClass]="{ 'text-green-600': tx.type === 'income', 'text-red-600': tx.type === 'expense' }">
-                        {{ tx.type === 'income' ? '+' : '-' }}{{ tx.amount }}€
-                    </p>
-                </div>
-
-                <p class="text-xs text-gray-400">{{ tx.date | date: 'shortDate' }}</p>
-            </div>
+            <ng-container *ngSwitchCase="'add'">
+                <app-transaction-form />
+            </ng-container>
         </div>
 
-        <app-add-transaction-button />
-        <!-- 
-        <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()" class="space-y-4">
-            <div>
-                <label class="block mb-1">Name</label>
-                <input type="text" formControlName="name" class="w-full border p-2 rounded-lg" />
-            </div>
+        <app-add-transaction-button (click)="modalMode = 'add'" *ngIf="modalMode === 'view'" />
 
-            <div>
-                <label class="block mb-1">Amount</label>
-                <input type="number" formControlName="amount" step="0.01" class="w-full border p-2 rounded-lg" />
-            </div>
+        <div [ngSwitch]="modalMode" class="flex justify-center space-x-2 pt-4">
+            <ng-container *ngSwitchCase="'view'">
+                <button type="button" (click)="onClose()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+                    Cancel
+                </button>
+                <button type="submit" [disabled]="transactionList.length < 1" [ngClass]="{
+                    'bg-blue-300 ': transactionList.length < 1, 
+                    'bg-blue-600 hover:bg-blue-700': transactionList.length >= 1
+                    }" class="px-4 py-2  text-white rounded-lg ">
+                    Next
+                </button>
+            </ng-container>
 
-            <div>
-                <label class="block mb-1">Category</label>
-                <select formControlName="category" class="w-full border p-2 rounded-lg">
-                    <option value="">Select category</option>
-                    <option value="food">Food</option>
-                    <option value="transport">Transport</option>
-                    <option value="utilities">Utilities</option>
-                    <option value="entertainment">Entertainment</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block mb-1">Date</label>
-                <input type="date" formControlName="date" class="w-full border p-2 rounded-lg" />
-            </div>
-
-        </form> -->
-        <div class="flex justify-center space-x-2 pt-4">
-            <button type="button" (click)="onClose()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
-                Cancel
-            </button>
-            <button type="submit" [disabled]="expenseForm.invalid"
-                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                Next
-            </button>
+            <ng-container *ngSwitchCase="'add'">
+                <button type="button" (click)="modalMode = 'view'"
+                    class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+                    Back
+                </button>
+                <button type="submit" [disabled]="transactionList.length < 1" [ngClass]="{
+                    'bg-blue-300 ': transactionList.length < 1, 
+                    'bg-blue-600 hover:bg-blue-700': transactionList.length >= 1
+                    }" class="px-4 py-2  text-white rounded-lg ">
+                    Next
+                </button>
+            </ng-container>
         </div>
     </div>
 </div>
