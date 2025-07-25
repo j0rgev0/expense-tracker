@@ -1,32 +1,29 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output, OnInit, HostListener } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Transaction } from '../../Interface/Transaction';
 import { AddTransactionButtonComponent } from '../add-transaction-button/add-transaction-button.component';
 import { TransactionService } from '../../Services/transactions.service';
-import { UUID } from 'crypto';
+import { ViewTransactionsComponent } from '../view-transactions/view-transactions.component';
+import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
 
 @Component({
   selector: 'app-modal-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AddTransactionButtonComponent],
+  imports: [
+    CommonModule,
+    AddTransactionButtonComponent,
+    ViewTransactionsComponent,
+    TransactionFormComponent
+  ],
   templateUrl: './modal-form.component.html'
 })
 export class ModalFormComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   @Output() submitExpense = new EventEmitter<any>();
 
-  constructor(
-    private fb: FormBuilder,
-    private transactionService: TransactionService
-  ) {}
+  constructor(private transactionService: TransactionService) {}
 
-  expenseForm = this.fb.group({
-    name: ['', Validators.required],
-    amount: [null, [Validators.required, Validators.min(0.01)]],
-    category: ['', Validators.required],
-    date: [new Date().toISOString().substring(0, 10), Validators.required]
-  });
+  modalMode: 'view' | 'add' = 'view';
 
   transactionList: Transaction[] = [];
 
@@ -39,12 +36,6 @@ export class ModalFormComponent implements OnInit {
   loadTransactions() {
     this.transactionList = this.transactionService.getAllTransactions();
   }
-
-  deleteTransaction(id: UUID) {
-    this.transactionService.deleteTransaction(id);
-  }
-
-  onSubmit() {}
 
   onClose() {
     this.close.emit();
