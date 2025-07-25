@@ -15,18 +15,20 @@ export class HomeComponent {
 
   income: Transaction[] = [
     {
+      id: crypto.randomUUID(),
       type: 'income',
       category: 'salary',
       title: 'salario',
       amount: 300,
-      date: new Date().getDate() // new Date().toISOString().split('T')[0]
+      date: new Date().toISOString().split('T')[0]
     },
     {
-      type: 'income',
+      id: crypto.randomUUID(),
+      type: 'expense',
       category: 'donation',
       title: 'regalo de cumple',
       amount: 233,
-      date: new Date().getDate()
+      date: new Date().toISOString().split('T')[0]
     }
   ];
 

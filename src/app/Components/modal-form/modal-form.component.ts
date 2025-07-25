@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Transaction } from '../../Interface/Transaction';
-import { AddTransactionButtonComponent } from "../add-transaction-button/add-transaction-button.component";
+import { AddTransactionButtonComponent } from '../add-transaction-button/add-transaction-button.component';
+import { getAllTransactions } from '../../Utils/manageTransaction';
 
 @Component({
   selector: 'app-modal-form',
@@ -16,18 +17,10 @@ export class ModalFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {}
 
-  stored = localStorage.getItem('transactions');
   transactionList: Transaction[] = [];
 
   ngOnInit(): void {
-    if (this.stored) {
-      try {
-        this.transactionList = JSON.parse(this.stored) as Transaction[];
-      } catch (error) {
-        console.error('Error parsing transactions:', error);
-        this.transactionList = [];
-      }
-    }
+    this.transactionList = getAllTransactions();
   }
 
   expenseForm = this.fb.group({
@@ -38,7 +31,13 @@ export class ModalFormComponent implements OnInit {
   });
 
   onSubmit() {}
+
   onClose() {
+    this.close.emit();
+  }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  onEscapePress() {
     this.close.emit();
   }
 }
