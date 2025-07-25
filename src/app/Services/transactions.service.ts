@@ -26,6 +26,10 @@ export class TransactionService {
     this.transactionsSubject.next(updated);
   }
 
+  public getAllTransactions(): Transaction[] {
+    return this.loadTransactions();
+  }
+
   reloadTransactions(): void {
     this.transactionsSubject.next(this.loadTransactions());
   }

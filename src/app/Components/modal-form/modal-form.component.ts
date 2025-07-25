@@ -3,7 +3,6 @@ import { Component, EventEmitter, Output, OnInit, HostListener } from '@angular/
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Transaction } from '../../Interface/Transaction';
 import { AddTransactionButtonComponent } from '../add-transaction-button/add-transaction-button.component';
-import { getAllTransactions } from '../../Utils/manageTransaction';
 import { TransactionService } from '../../Services/transactions.service';
 
 @Component({
@@ -30,7 +29,7 @@ export class ModalFormComponent implements OnInit {
   }
 
   loadTransactions() {
-    this.transactionList = getAllTransactions();
+    this.transactionList = this.transactionService.getAllTransactions();
   }
 
   expenseForm = this.fb.group({

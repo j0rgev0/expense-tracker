@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { addTransaction } from '../../Utils/manageTransaction';
 import { Transaction } from '../../Interface/Transaction';
 import { TransactionService } from '../../Services/transactions.service';
 
