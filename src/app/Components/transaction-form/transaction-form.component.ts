@@ -13,7 +13,9 @@ export class TransactionFormComponent {
 
   constructor(private fb: FormBuilder) {}
 
-  expenseForm = this.fb.group({
+  formType: 'income' | 'expense' = 'income';
+
+  validForm = this.fb.group({
     name: ['', Validators.required],
     amount: [null, [Validators.required, Validators.min(0.01)]],
     category: ['', Validators.required],
