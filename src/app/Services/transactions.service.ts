@@ -50,4 +50,9 @@ export class TransactionService {
   reloadTransactions(): void {
     this.transactionsSubject.next(this.loadTransactions());
   }
+
+  calculateTotalAmount(): number {
+    const transactions = this.loadTransactions();
+    return transactions.reduce((total, trans) => total + trans.amount, 0);
+  }
 }

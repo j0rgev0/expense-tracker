@@ -1,0 +1,14 @@
+<div class="max-w-7xl w-full mx-auto min-h-screen">
+  <div>
+    <app-header-info-dashboard></app-header-info-dashboard>
+  </div>
+  <div class="flex flex-col justify-center mt-10">
+    <app-accordion-transaction
+      *ngFor="let transaction of transactionsList"
+      [transaction]="transaction"
+    ></app-accordion-transaction>
+  </div>
+  <div class="mt-6">
+    <app-add-transaction-button></app-add-transaction-button>
+  </div>
+</div>
