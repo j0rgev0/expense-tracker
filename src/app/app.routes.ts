@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { NextComponent } from './Sections/next/next.component';
-import { HeroComponent } from './Sections/hero/hero.component';
+import { NextComponent } from './Pages/next/next.component';
+import { HomeComponent } from './Pages/home/home.component';
 
 export const routes: Routes = [
-  { path: '', component: HeroComponent },
-  { path: 'next', component: NextComponent },
+  { path: '', component: HomeComponent },
+  { path: 'next', component: NextComponent }
 ];
