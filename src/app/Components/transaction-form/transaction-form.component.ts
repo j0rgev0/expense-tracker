@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
@@ -9,9 +9,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
   templateUrl: './transaction-form.component.html'
 })
 export class TransactionFormComponent {
+  @Output() back = new EventEmitter<void>();
+
   constructor(private fb: FormBuilder) {}
 
-  expenseForm = this.fb.group({
+  formType: 'income' | 'expense' = 'income';
+
+  validForm = this.fb.group({
     name: ['', Validators.required],
     amount: [null, [Validators.required, Validators.min(0.01)]],
     category: ['', Validators.required],
@@ -19,4 +23,8 @@ export class TransactionFormComponent {
   });
 
   onSubmit() {}
+
+  onBack() {
+    this.back.emit();
+  }
 }

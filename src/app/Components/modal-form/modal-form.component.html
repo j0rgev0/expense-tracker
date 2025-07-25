@@ -8,37 +8,22 @@
             </ng-container>
 
             <ng-container *ngSwitchCase="'add'">
-                <app-transaction-form />
+                <app-transaction-form (back)="modalMode = 'view'" />
             </ng-container>
         </div>
 
         <app-add-transaction-button (click)="modalMode = 'add'" *ngIf="modalMode === 'view'" />
 
-        <div [ngSwitch]="modalMode" class="flex justify-center space-x-2 pt-4">
-            <ng-container *ngSwitchCase="'view'">
-                <button type="button" (click)="onClose()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
-                    Cancel
-                </button>
-                <button type="submit" [disabled]="transactionList.length < 1" [ngClass]="{
+        <div *ngIf="modalMode === 'view'" class="flex justify-center space-x-2 pt-4">
+            <button type="button" (click)="onClose()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+                Cancel
+            </button>
+            <button type="button" [disabled]="transactionList.length < 1" [ngClass]="{
                     'bg-blue-300 ': transactionList.length < 1, 
                     'bg-blue-600 hover:bg-blue-700': transactionList.length >= 1
                     }" class="px-4 py-2  text-white rounded-lg ">
-                    Next
-                </button>
-            </ng-container>
-
-            <ng-container *ngSwitchCase="'add'">
-                <button type="button" (click)="modalMode = 'view'"
-                    class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
-                    Back
-                </button>
-                <button type="submit" [disabled]="transactionList.length < 1" [ngClass]="{
-                    'bg-blue-300 ': transactionList.length < 1, 
-                    'bg-blue-600 hover:bg-blue-700': transactionList.length >= 1
-                    }" class="px-4 py-2  text-white rounded-lg ">
-                    Next
-                </button>
-            </ng-container>
+                Next
+            </button>
         </div>
     </div>
 </div>
