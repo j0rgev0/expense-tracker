@@ -28,6 +28,54 @@ export class AddTransactionButtonComponent {
       category: 'donation',
       amount: 233,
       date: new Date().toISOString().split('T')[0]
+    },
+    {
+      id: crypto.randomUUID(),
+      title: 'transaccion 2',
+      type: 'expense',
+      category: 'donation',
+      amount: 233,
+      date: new Date().toISOString().split('T')[0]
+    },
+    {
+      id: crypto.randomUUID(),
+      title: 'transaccion 3',
+      type: 'expense',
+      category: 'donation',
+      amount: 233,
+      date: new Date().toISOString().split('T')[0]
+    },
+    {
+      id: crypto.randomUUID(),
+      title: 'transaccion 4',
+      type: 'expense',
+      category: 'donation',
+      amount: 233,
+      date: new Date().toISOString().split('T')[0]
+    },
+    {
+      id: crypto.randomUUID(),
+      title: 'transaccion 5',
+      type: 'expense',
+      category: 'donation',
+      amount: 50,
+      date: new Date().toISOString().split('T')[0]
+    },
+    {
+      id: crypto.randomUUID(),
+      title: 'transaccion 6',
+      type: 'expense',
+      category: 'donation',
+      amount: 50,
+      date: new Date().toISOString().split('T')[0]
+    },
+    {
+      id: crypto.randomUUID(),
+      title: 'transaccion 7',
+      type: 'expense',
+      category: 'donation',
+      amount: 233,
+      date: new Date().toISOString().split('T')[0]
     }
   ];
 
