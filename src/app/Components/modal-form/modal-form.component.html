@@ -5,7 +5,7 @@
         <div *ngFor="let tx of transactionList"
             class="relative border border-gray-200 rounded-2xl p-4 mb-4 shadow-sm hover:shadow-md transition-all duration-200 bg-white">
 
-            <button aria-label="Delete transaction"
+            <button (click)="deleteTransaction(tx.id)" aria-label="Delete transaction"
                 class="absolute top-2 right-2 w-7 h-7 flex items-center justify-center text-red-500 hover:text-red-700 focus:outline-none transition">
 
                 <svg class="w-5 h-5" aria-hidden=" true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"

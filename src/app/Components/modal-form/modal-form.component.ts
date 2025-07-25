@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Transaction } from '../../Interface/Transaction';
 import { AddTransactionButtonComponent } from '../add-transaction-button/add-transaction-button.component';
 import { TransactionService } from '../../Services/transactions.service';
+import { UUID } from 'crypto';
 
 @Component({
   selector: 'app-modal-form',
@@ -20,6 +21,13 @@ export class ModalFormComponent implements OnInit {
     private transactionService: TransactionService
   ) {}
 
+  expenseForm = this.fb.group({
+    name: ['', Validators.required],
+    amount: [null, [Validators.required, Validators.min(0.01)]],
+    category: ['', Validators.required],
+    date: [new Date().toISOString().substring(0, 10), Validators.required]
+  });
+
   transactionList: Transaction[] = [];
 
   ngOnInit(): void {
@@ -32,12 +40,9 @@ export class ModalFormComponent implements OnInit {
     this.transactionList = this.transactionService.getAllTransactions();
   }
 
-  expenseForm = this.fb.group({
-    name: ['', Validators.required],
-    amount: [null, [Validators.required, Validators.min(0.01)]],
-    category: ['', Validators.required],
-    date: [new Date().toISOString().substring(0, 10), Validators.required]
-  });
+  deleteTransaction(id: UUID) {
+    this.transactionService.deleteTransaction(id);
+  }
 
   onSubmit() {}
 
