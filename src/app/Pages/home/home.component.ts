@@ -14,8 +14,20 @@ export class HomeComponent {
   constructor(private router: Router) {}
 
   income: Transaction[] = [
-    { type: 'income', category: 'salary', title: 'salario', amount: 233 },
-    { type: 'income', category: 'salary', title: 'salario', amount: 233 }
+    {
+      type: 'income',
+      category: 'salary',
+      title: 'salario',
+      amount: 300,
+      date: new Date().getDate() // new Date().toISOString().split('T')[0]
+    },
+    {
+      type: 'income',
+      category: 'donation',
+      title: 'regalo de cumple',
+      amount: 233,
+      date: new Date().getDate()
+    }
   ];
 
   modalOpen = false;

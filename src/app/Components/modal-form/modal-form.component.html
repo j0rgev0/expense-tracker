@@ -4,6 +4,13 @@
     <div class="flex-1 bg-white p-6 rounded-2xl shadow-lg w-full max-w-md">
         <h2 class="text-xl text-center font-semibold mb-4">Monthly Income</h2>
 
+
+        <div *ngFor="let tx of transactionList" class="border rounded-lg p-4 mb-4">
+            <p>{{ tx.title }} - {{ tx.amount }}€ ({{ tx.category }})</p>
+        </div>
+
+        <app-add-transaction-button />
+        <!-- 
         <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()" class="space-y-4">
             <div>
                 <label class="block mb-1">Name</label>
@@ -31,15 +38,15 @@
                 <input type="date" formControlName="date" class="w-full border p-2 rounded-lg" />
             </div>
 
-            <div class="flex justify-center space-x-2 pt-4">
-                <button type="button" (click)="onClose()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
-                    Cancel
-                </button>
-                <button type="submit" [disabled]="expenseForm.invalid"
-                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                    Next
-                </button>
-            </div>
-        </form>
+        </form> -->
+        <div class="flex justify-center space-x-2 pt-4">
+            <button type="button" (click)="onClose()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+                Cancel
+            </button>
+            <button type="submit" [disabled]="expenseForm.invalid"
+                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Next
+            </button>
+        </div>
     </div>
 </div>
