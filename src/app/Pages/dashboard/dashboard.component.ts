@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { HeaderInfoDashboardComponent } from '../../Components/header-info-dashboard/header-info-dashboard.component';
 import { AccordionTransactionComponent } from '../../Components/accordion-transaction/accordion-transaction.component';
 import { TransactionService } from '../../Services/transactions.service';
-import { Transaction } from '../../Interface/Transaction';
+import { Category, Transaction } from '../../Interface/Transaction';
 import { AddTransactionButtonComponent } from '../../Components/add-transaction-button/add-transaction-button.component';
+import { FiltersComponent } from '../../Components/filters/filters.component';
+import { ModalFormComponent } from '../../Components/modal-form/modal-form.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -12,14 +14,68 @@ import { AddTransactionButtonComponent } from '../../Components/add-transaction-
     CommonModule,
     HeaderInfoDashboardComponent,
     AccordionTransactionComponent,
+    FiltersComponent,
+    ModalFormComponent,
     AddTransactionButtonComponent
   ],
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
+  // lists
+  transactionsListFiltered: Transaction[] = [];
   transactionsList: Transaction[] = [];
 
+  // modal
+  modalOpen: boolean = false;
+
   constructor(private transactionService: TransactionService) {
-    this.transactionsList = this.transactionService.getAllTransactions();
+    this.transactionService.transactions$.subscribe(transactions => {
+      this.transactionsList = transactions;
+      this.transactionsListFiltered = [...this.transactionsList];
+    });
+  }
+
+  // filters
+  filterByType(typeSelected: 'income' | 'expense' | 'all') {
+    console.log(typeSelected);
+    if (typeSelected === 'all') {
+      this.transactionsListFiltered = [...this.transactionsList];
+    } else {
+      this.transactionsListFiltered = this.transactionsList.filter(t => t.type === typeSelected);
+    }
+  }
+
+  filterByCategory(categorySelected: Category) {
+    if (categorySelected === 'all') {
+      this.transactionsListFiltered = [...this.transactionsList];
+      return;
+    }
+    this.transactionsListFiltered = this.transactionsList.filter(
+      c => c.category === categorySelected
+    );
+  }
+
+  filterByDate(date: string) {
+    console.log(date);
+    if (date === '') {
+      this.transactionsListFiltered = [...this.transactionsList];
+      return;
+    }
+    const selectedDate = new Date(date);
+
+    this.transactionsListFiltered = this.transactionsList.filter(c => {
+      const transactionDate = new Date(c.date);
+      return transactionDate >= selectedDate; // desde la fecha seleccionada en adelante
+    });
+  }
+
+  filterByAmount(amount: number) {
+    this.transactionsListFiltered = this.transactionsList.filter(c => c.amount >= amount);
+  }
+
+  // search
+  filterByTitle(search: string) {
+    console.log(search);
+    this.transactionsListFiltered = this.transactionsList.filter(c => c.title.includes(search));
   }
 }

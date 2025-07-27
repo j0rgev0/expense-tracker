@@ -1,7 +1,7 @@
 // src/app/services/transaction.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Transaction } from '../Interface/Transaction';
+import { Category, Transaction } from '../Interface/Transaction';
 import { UUID } from 'crypto';
 
 @Injectable({ providedIn: 'root' })
@@ -10,6 +10,9 @@ export class TransactionService {
   public transactions$ = this.transactionsSubject.asObservable();
 
   private loadTransactions(): Transaction[] {
+    if (typeof window === 'undefined' || !window.localStorage) {
+      return [];
+    }
     const data = localStorage.getItem('transactions');
     return data ? JSON.parse(data) : [];
   }
@@ -53,6 +56,11 @@ export class TransactionService {
 
   calculateTotalAmount(): number {
     const transactions = this.loadTransactions();
-    return transactions.reduce((total, trans) => total + trans.amount, 0);
+    const transactionExpenses = transactions.filter(t => t.type === 'expense');
+    const transactionIncomes = transactions.filter(t => t.type === 'income');
+    return (
+      transactionIncomes.reduce((total, trans) => total + trans.amount, 0) -
+      transactionExpenses.reduce((total, trans) => total + trans.amount, 0)
+    );
   }
 }
