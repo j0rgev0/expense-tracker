@@ -42,7 +42,7 @@ export class TransactionFormComponent {
     title: ['', Validators.required],
     amount: [null, [Validators.required, Validators.min(0.01)]],
     category: ['', [Validators.required, allowedValuesValidatos([...this.allCategories])]],
-    date: [new Date().toISOString().substring(0, 10), Validators.required]
+    date: ['', Validators.required]
   });
 
   onSubmit() {
