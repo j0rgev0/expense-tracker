@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { TransactionService } from '../../Services/transactions.service';
 
 import { CATEGORIES } from '../../utils/consts';
-import { Category } from '../../Interface/Transaction';
+import { AllCategories } from '../../Interface/Transaction';
 @Component({
   selector: 'app-filters',
   standalone: true,
@@ -16,13 +16,13 @@ export class FiltersComponent {
   listCategories = CATEGORIES;
   // flags
   @Output() selectedTypeChange = new EventEmitter<'income' | 'expense' | 'all'>();
-  @Output() selectedCategoryChange = new EventEmitter<Category>();
+  @Output() selectedCategoryChange = new EventEmitter<AllCategories>();
   @Output() selectedDateChange = new EventEmitter<string>();
   @Output() selectedAmountChange = new EventEmitter<number>();
   @Output() selectedSearchChange = new EventEmitter<string>();
 
   selectedType: 'income' | 'expense' | 'all' = 'all';
-  categorySelected: Category = 'all';
+  categorySelected: AllCategories = 'all';
   selectedDate: string = '';
   selectedAmount: number = 0;
   search: string = '';
@@ -33,7 +33,7 @@ export class FiltersComponent {
     this.selectedTypeChange.emit(typeSelected);
   }
 
-  emitByCategory(event: Category) {
+  emitByCategory(event: AllCategories) {
     this.selectedCategoryChange.emit(event);
   }
 

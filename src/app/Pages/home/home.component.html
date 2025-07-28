@@ -9,7 +9,7 @@
         Control your expenses, save more and reach your financial goals easily.
       </p>
 
-      <button (click)="modalOpen = true"
+      <button (click)="openModal()"
         class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg shadow transition duration-150 ease-in-out transform hover:-translate-y-1 hover:scale-105">
         Start now
       </button>
@@ -31,4 +31,4 @@
   </div>
 </section>
 
-<app-modal *ngIf="modalOpen" (close)="modalOpen = false" />
+<app-modal [show]="isModalOpen" (close)="closeModal()" />

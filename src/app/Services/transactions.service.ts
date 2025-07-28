@@ -1,7 +1,7 @@
 // src/app/services/transaction.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Category, Transaction } from '../Interface/Transaction';
+import { Transaction } from '../Interface/Transaction';
 import { UUID } from 'crypto';
 
 @Injectable({ providedIn: 'root' })
