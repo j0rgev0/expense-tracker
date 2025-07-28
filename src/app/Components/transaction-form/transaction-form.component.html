@@ -12,11 +12,11 @@
     </div>
 
     <form [formGroup]="validForm" (ngSubmit)="onSubmit()" class=" space-y-4">
-        <input type="hidden" [value]="formType" />
+        <input type="hidden" formControlName="type" [value]="formType" />
 
         <div>
-            <label class="block mb-1 text-sm font-medium text-gray-700">Name</label>
-            <input type="text" formControlName="name"
+            <label class="block mb-1 text-sm font-medium text-gray-700">Title</label>
+            <input type="text" formControlName="title"
                 class="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" />
         </div>
 
