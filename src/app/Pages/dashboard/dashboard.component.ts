@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { HeaderInfoDashboardComponent } from '../../Components/header-info-dashboard/header-info-dashboard.component';
 import { AccordionTransactionComponent } from '../../Components/accordion-transaction/accordion-transaction.component';
 import { TransactionService } from '../../Services/transactions.service';
-import { Category, Transaction } from '../../Interface/Transaction';
+import { expenseCategory, incomesCategory, Transaction } from '../../Interface/Transaction';
 import { AddTransactionButtonComponent } from '../../Components/add-transaction-button/add-transaction-button.component';
 import { FiltersComponent } from '../../Components/filters/filters.component';
 import { ModalComponent } from '../../Components/modal/modal.component';
@@ -45,7 +45,7 @@ export class DashboardComponent {
     }
   }
 
-  filterByCategory(categorySelected: Category) {
+  filterByCategory(categorySelected: incomesCategory | expenseCategory) {
     if (categorySelected === 'all') {
       this.transactionsListFiltered = [...this.transactionsList];
       return;

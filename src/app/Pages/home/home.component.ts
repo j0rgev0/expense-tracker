@@ -11,5 +11,13 @@ import { CommonModule } from '@angular/common';
 })
 export class HomeComponent {
   constructor(private router: Router) {}
-  modalOpen = false;
+  isModalOpen = false;
+
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+  }
 }

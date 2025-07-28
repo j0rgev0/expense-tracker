@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output, OnInit, HostListener } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, HostListener, Input } from '@angular/core';
 import { Transaction } from '../../Interface/Transaction';
 import { AddTransactionButtonComponent } from '../add-transaction-button/add-transaction-button.component';
 import { TransactionService } from '../../Services/transactions.service';
@@ -18,6 +18,7 @@ import { TransactionFormComponent } from '../transaction-form/transaction-form.c
   templateUrl: './modal.component.html'
 })
 export class ModalComponent implements OnInit {
+  @Input() show = false;
   @Output() close = new EventEmitter<void>();
   @Output() submitExpense = new EventEmitter<any>();
 
