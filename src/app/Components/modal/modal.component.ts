@@ -7,7 +7,7 @@ import { ViewTransactionsComponent } from '../view-transactions/view-transaction
 import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
 
 @Component({
-  selector: 'app-modal-form',
+  selector: 'app-modal',
   standalone: true,
   imports: [
     CommonModule,
@@ -15,9 +15,9 @@ import { TransactionFormComponent } from '../transaction-form/transaction-form.c
     ViewTransactionsComponent,
     TransactionFormComponent
   ],
-  templateUrl: './modal-form.component.html'
+  templateUrl: './modal.component.html'
 })
-export class ModalFormComponent implements OnInit {
+export class ModalComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   @Output() submitExpense = new EventEmitter<any>();
 

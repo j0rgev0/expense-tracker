@@ -24,7 +24,7 @@ export class AddTransactionButtonComponent {
     {
       id: crypto.randomUUID(),
       title: 'regalo de cumple',
-      type: 'expense',
+      type: 'income',
       category: 'donation',
       amount: 233,
       date: new Date().toISOString().split('T')[0]
@@ -34,7 +34,7 @@ export class AddTransactionButtonComponent {
       title: 'transaccion 2',
       type: 'expense',
       category: 'donation',
-      amount: 233,
+      amount: 123,
       date: new Date().toISOString().split('T')[0]
     },
     {
@@ -42,15 +42,15 @@ export class AddTransactionButtonComponent {
       title: 'transaccion 3',
       type: 'expense',
       category: 'donation',
-      amount: 233,
+      amount: 143,
       date: new Date().toISOString().split('T')[0]
     },
     {
       id: crypto.randomUUID(),
       title: 'transaccion 4',
-      type: 'expense',
+      type: 'income',
       category: 'donation',
-      amount: 233,
+      amount: 250,
       date: new Date().toISOString().split('T')[0]
     },
     {
