@@ -1,10 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output, OnInit, HostListener, Input } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  OnInit,
+  HostListener,
+  Input,
+  SimpleChanges,
+  OnChanges
+} from '@angular/core';
 import { Transaction } from '../../Interface/Transaction';
 import { AddTransactionButtonComponent } from '../add-transaction-button/add-transaction-button.component';
 import { TransactionService } from '../../Services/transactions.service';
 import { ViewTransactionsComponent } from '../view-transactions/view-transactions.component';
 import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-modal',
@@ -17,14 +27,17 @@ import { TransactionFormComponent } from '../transaction-form/transaction-form.c
   ],
   templateUrl: './modal.component.html'
 })
-export class ModalComponent implements OnInit {
+export class ModalComponent implements OnInit, OnChanges {
   @Input() show = false;
+  @Input() defaultView!: 'view' | 'add';
   @Output() close = new EventEmitter<void>();
-  @Output() submitExpense = new EventEmitter<any>();
 
-  constructor(private transactionService: TransactionService) {}
+  modalMode: 'view' | 'add' = this.defaultView;
 
-  modalMode: 'view' | 'add' = 'view';
+  constructor(
+    private transactionService: TransactionService,
+    private router: Router
+  ) {}
 
   transactionList: Transaction[] = [];
 
@@ -34,8 +47,18 @@ export class ModalComponent implements OnInit {
     });
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['defaultView'] && changes['defaultView'].currentValue) {
+      this.modalMode = changes['defaultView'].currentValue;
+    }
+  }
+
   loadTransactions() {
     this.transactionList = this.transactionService.getAllTransactions();
+  }
+
+  onNext() {
+    this.router.navigate(['/dashboard']);
   }
 
   onClose() {

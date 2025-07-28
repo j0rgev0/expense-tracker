@@ -12,18 +12,25 @@
     </div>
 
     <form [formGroup]="validForm" (ngSubmit)="onSubmit()" class=" space-y-4">
-        <input type="hidden" [value]="formType" />
+        <input type="hidden" formControlName="type" [value]="formType" />
 
         <div>
-            <label class="block mb-1 text-sm font-medium text-gray-700">Name</label>
-            <input type="text" formControlName="name"
+            <label class="block mb-1 text-sm font-medium text-gray-700">Title</label>
+            <input type="text" formControlName="title"
                 class="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" />
+            <div class="text-red-600" *ngIf="validForm.get('title')?.touched && validForm.get('title')?.invalid">
+                <small *ngIf="validForm.get('title')?.errors?.['required']">Title is required.</small>
+            </div>
         </div>
 
         <div>
             <label class="block mb-1 text-sm font-medium text-gray-700">Amount</label>
             <input type="number" formControlName="amount" step="0.01"
                 class="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" />
+            <div class="text-red-600" *ngIf="validForm.get('amount')?.touched && validForm.get('amount')?.invalid">
+                <small *ngIf="validForm.get('amount')?.errors?.['required']">Amount is required.</small>
+                <small *ngIf="validForm.get('amount')?.errors?.['min']">Amount must be greater than 0.</small>
+            </div>
         </div>
 
         <div>
@@ -36,19 +43,26 @@
                 class="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
                 <option class="capitalize" *ngFor="let c of expenseCatlist" [value]="c">{{ c }}</option>
             </select>
+            <div class="text-red-600" *ngIf="validForm.get('category')?.touched && validForm.get('category')?.invalid">
+                <small *ngIf="validForm.get('category')?.errors?.['required']">Category is required.</small>
+                <small *ngIf="validForm.get('category')?.errors?.['allowedValues']">Invalid category.</small>
+            </div>
         </div>
 
         <div>
             <label class="block mb-1 text-sm font-medium text-gray-700">Date</label>
             <input type="date" formControlName="date"
                 class="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" />
+            <div class="text-red-600" *ngIf="validForm.get('date')?.touched && validForm.get('date')?.invalid">
+                <small *ngIf="validForm.get('date')?.errors?.['required']">Date is required.</small>
+            </div>
         </div>
 
         <div class="flex justify-center space-x-2 pt-4">
             <button type="button" (click)="onBack()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
                 Back
             </button>
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg ">
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">
                 Save
             </button>
         </div>

@@ -2,10 +2,10 @@ import { UUID } from 'crypto';
 
 export interface Transaction {
   id: UUID;
-  category: IncomesCategory | ExpenseCategory | 'all';
+  category: string;
   title: string;
   amount: number;
-  type: 'income' | 'expense';
+  type: string;
   date: string;
 }
 

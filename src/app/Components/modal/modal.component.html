@@ -12,13 +12,13 @@
             </ng-container>
         </div>
 
-        <app-add-transaction-button (click)="modalMode = 'add'" *ngIf="modalMode === 'view'" />
+        <app-add-transaction-button (action)="modalMode = 'add'" *ngIf="modalMode === 'view'" />
 
         <div *ngIf="modalMode === 'view'" class="flex justify-center space-x-2 pt-4">
             <button type="button" (click)="onClose()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
                 Cancel
             </button>
-            <button type="button" [disabled]="transactionList.length < 1" [ngClass]="{
+            <button type="button" (click)="onNext()" [disabled]="transactionList.length < 1" [ngClass]="{
                     'bg-blue-300 ': transactionList.length < 1, 
                     'bg-blue-600 hover:bg-blue-700': transactionList.length >= 1
                     }" class="px-4 py-2  text-white rounded-lg ">
