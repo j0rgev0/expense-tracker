@@ -3,7 +3,12 @@ import { Component, Input } from '@angular/core';
 import { HeaderInfoDashboardComponent } from '../../Components/header-info-dashboard/header-info-dashboard.component';
 import { AccordionTransactionComponent } from '../../Components/accordion-transaction/accordion-transaction.component';
 import { TransactionService } from '../../Services/transactions.service';
-import { expenseCategory, incomesCategory, Transaction } from '../../Interface/Transaction';
+import {
+  AllCategories,
+  ExpenseCategory,
+  IncomesCategory,
+  Transaction
+} from '../../Interface/Transaction';
 import { AddTransactionButtonComponent } from '../../Components/add-transaction-button/add-transaction-button.component';
 import { FiltersComponent } from '../../Components/filters/filters.component';
 import { ModalComponent } from '../../Components/modal/modal.component';
@@ -45,7 +50,7 @@ export class DashboardComponent {
     }
   }
 
-  filterByCategory(categorySelected: incomesCategory | expenseCategory) {
+  filterByCategory(categorySelected: AllCategories) {
     if (categorySelected === 'all') {
       this.transactionsListFiltered = [...this.transactionsList];
       return;
@@ -65,7 +70,7 @@ export class DashboardComponent {
 
     this.transactionsListFiltered = this.transactionsList.filter(c => {
       const transactionDate = new Date(c.date);
-      return transactionDate >= selectedDate; // desde la fecha seleccionada en adelante
+      return transactionDate >= selectedDate; 
     });
   }
 

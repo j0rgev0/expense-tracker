@@ -11,9 +11,9 @@
         </div>
     </div>
 
-    <form [formGroup]="validForm" (ngSubmit)="onSubmit()" class="px-6  space-y-4">
+    <form [formGroup]="validForm" (ngSubmit)="onSubmit()" class=" space-y-4">
         <input type="hidden" [value]="formType" />
-        
+
         <div>
             <label class="block mb-1 text-sm font-medium text-gray-700">Name</label>
             <input type="text" formControlName="name"
@@ -28,13 +28,13 @@
 
         <div>
             <label class="block mb-1 text-sm font-medium text-gray-700">Category</label>
-            <select formControlName="category"
+            <select *ngIf="formType === 'income'" formControlName="category"
                 class="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
-                <option value="">Select category</option>
-                <option value="food">Food</option>
-                <option value="transport">Transport</option>
-                <option value="utilities">Utilities</option>
-                <option value="entertainment">Entertainment</option>
+                <option class="capitalize" *ngFor="let c of incomeCatList" [value]="c">{{ c }}</option>
+            </select>
+            <select *ngIf="formType === 'expense'" formControlName="category"
+                class="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <option class="capitalize" *ngFor="let c of expenseCatlist" [value]="c">{{ c }}</option>
             </select>
         </div>
 

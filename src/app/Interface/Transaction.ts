@@ -2,29 +2,75 @@ import { UUID } from 'crypto';
 
 export interface Transaction {
   id: UUID;
-  category: incomesCategory | expenseCategory;
+  category: IncomesCategory | ExpenseCategory | 'all';
   title: string;
   amount: number;
   type: 'income' | 'expense';
   date: string;
 }
 
-export type incomesCategory =
-  | 'all'
+export type IncomesCategory =
   | 'salary'
-  | 'donation'
-  | 'rent'
-  | 'food'
-  | 'transportation'
-  | 'entertainment'
+  | 'freelance'
+  | 'investment'
+  | 'interest'
+  | 'rental'
+  | 'dividends'
+  | 'business'
+  | 'refund'
+  | 'gift'
+  | 'bonus'
+  | 'sale'
   | 'other';
 
-export type expenseCategory =
-  | 'all'
-  | 'salary'
-  | 'donation'
-  | 'rent'
-  | 'food'
+export type ExpenseCategory =
+  | 'housing'
+  | 'utilities'
+  | 'groceries'
   | 'transportation'
+  | 'insurance'
+  | 'healthcare'
   | 'entertainment'
+  | 'subscriptions'
+  | 'education'
+  | 'clothing'
+  | 'personalCare'
+  | 'debt'
+  | 'savings'
+  | 'donation'
+  | 'travel'
+  | 'taxes'
+  | 'gift'
+  | 'business'
+  | 'other';
+
+export type AllCategories =
+  | 'all'
+  | 'housing'
+  | 'utilities'
+  | 'groceries'
+  | 'transportation'
+  | 'insurance'
+  | 'healthcare'
+  | 'entertainment'
+  | 'subscriptions'
+  | 'education'
+  | 'clothing'
+  | 'personalCare'
+  | 'debt'
+  | 'savings'
+  | 'donation'
+  | 'travel'
+  | 'taxes'
+  | 'salary'
+  | 'freelance'
+  | 'investment'
+  | 'interest'
+  | 'rental'
+  | 'dividends'
+  | 'business'
+  | 'refund'
+  | 'gift'
+  | 'bonus'
+  | 'sale'
   | 'other';

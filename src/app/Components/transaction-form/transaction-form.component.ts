@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { EXPENSECAT, INCOMECAT } from '../../utils/consts';
 
 @Component({
   selector: 'app-transaction-form',
@@ -14,6 +15,10 @@ export class TransactionFormComponent {
   constructor(private fb: FormBuilder) {}
 
   formType: 'income' | 'expense' = 'income';
+
+  incomeCatList = INCOMECAT;
+
+  expenseCatlist = EXPENSECAT;
 
   validForm = this.fb.group({
     name: ['', Validators.required],
