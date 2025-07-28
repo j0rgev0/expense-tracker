@@ -6,7 +6,7 @@ import { TransactionService } from '../../Services/transactions.service';
 import { Category, Transaction } from '../../Interface/Transaction';
 import { AddTransactionButtonComponent } from '../../Components/add-transaction-button/add-transaction-button.component';
 import { FiltersComponent } from '../../Components/filters/filters.component';
-import { ModalFormComponent } from '../../Components/modal-form/modal-form.component';
+import { ModalComponent } from '../../Components/modal/modal.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -15,7 +15,7 @@ import { ModalFormComponent } from '../../Components/modal-form/modal-form.compo
     HeaderInfoDashboardComponent,
     AccordionTransactionComponent,
     FiltersComponent,
-    ModalFormComponent,
+    ModalComponent,
     AddTransactionButtonComponent
   ],
   templateUrl: './dashboard.component.html'

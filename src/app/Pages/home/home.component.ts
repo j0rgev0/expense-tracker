@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { ModalFormComponent } from '../../Components/modal-form/modal-form.component';
+import { ModalComponent } from '../../Components/modal/modal.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterModule, ModalFormComponent, CommonModule],
+  imports: [RouterModule, ModalComponent, CommonModule],
   templateUrl: './home.component.html'
 })
 export class HomeComponent {
