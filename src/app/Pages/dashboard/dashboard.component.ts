@@ -12,6 +12,7 @@ import {
 import { AddTransactionButtonComponent } from '../../Components/add-transaction-button/add-transaction-button.component';
 import { FiltersComponent } from '../../Components/filters/filters.component';
 import { ModalComponent } from '../../Components/modal/modal.component';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -53,25 +54,25 @@ export class DashboardComponent {
   filterByCategory(categorySelected: AllCategories) {
     if (categorySelected === 'all') {
       this.transactionsListFiltered = [...this.transactionsList];
-      return;
+    } else {
+      this.transactionsListFiltered = this.transactionsList.filter(
+        c => c.category === categorySelected
+      );
     }
-    this.transactionsListFiltered = this.transactionsList.filter(
-      c => c.category === categorySelected
-    );
   }
 
   filterByDate(date: string) {
     console.log(date);
     if (date === '') {
       this.transactionsListFiltered = [...this.transactionsList];
-      return;
-    }
-    const selectedDate = new Date(date);
+    } else {
+      const selectedDate = new Date(date);
 
-    this.transactionsListFiltered = this.transactionsList.filter(c => {
-      const transactionDate = new Date(c.date);
-      return transactionDate >= selectedDate;
-    });
+      this.transactionsListFiltered = this.transactionsList.filter(c => {
+        const transactionDate = new Date(c.date);
+        return transactionDate >= selectedDate;
+      });
+    }
   }
 
   filterByAmount(amount: number) {
