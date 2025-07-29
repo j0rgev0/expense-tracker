@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class HomeComponent {
   constructor(private router: Router) {}
+
   isModalOpen = false;
 
   openModal() {
@@ -19,5 +20,9 @@ export class HomeComponent {
 
   closeModal() {
     this.isModalOpen = false;
+  }
+
+  onNext() {
+    this.router.navigate(['/dashboard']);
   }
 }

@@ -70,7 +70,7 @@ export class DashboardComponent {
 
     this.transactionsListFiltered = this.transactionsList.filter(c => {
       const transactionDate = new Date(c.date);
-      return transactionDate >= selectedDate; 
+      return transactionDate >= selectedDate;
     });
   }
 
@@ -78,9 +78,18 @@ export class DashboardComponent {
     this.transactionsListFiltered = this.transactionsList.filter(c => c.amount >= amount);
   }
 
-  // search
   filterByTitle(search: string) {
     console.log(search);
     this.transactionsListFiltered = this.transactionsList.filter(c => c.title.includes(search));
+  }
+
+  isModalOpen = false;
+
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
   }
 }
