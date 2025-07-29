@@ -12,7 +12,7 @@
       [transaction]="transaction"></app-accordion-transaction>
   </div>
   <div class="mt-6">
-    <app-add-transaction-button (click)="modalOpen = true"></app-add-transaction-button>
-    <app-modal *ngIf="modalOpen" (close)="modalOpen = false" />
+    <app-add-transaction-button (action)="openModal()" />
+    <app-modal [show]="isModalOpen" [defaultView]="'add'" (close)="closeModal()" (next)="closeModal()" />
   </div>
 </div>

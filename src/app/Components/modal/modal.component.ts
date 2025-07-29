@@ -31,6 +31,7 @@ export class ModalComponent implements OnInit, OnChanges {
   @Input() show = false;
   @Input() defaultView!: 'view' | 'add';
   @Output() close = new EventEmitter<void>();
+  @Output() next = new EventEmitter<void>();
 
   modalMode: 'view' | 'add' = this.defaultView;
 
@@ -58,7 +59,7 @@ export class ModalComponent implements OnInit, OnChanges {
   }
 
   onNext() {
-    this.router.navigate(['/dashboard']);
+    this.next.emit();
   }
 
   onClose() {
