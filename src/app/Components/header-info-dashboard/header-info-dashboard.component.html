@@ -1,14 +1,14 @@
-<section>
-  <div class="flex justify-between items-center gap-6">
-    <div class="flex-1">
-      <span class="text-7xl mt-6 font-bold"
+<section class="pt-4">
+  <div class="flex items-center">
+    <div class="">
+      <span class="text-7xl mt-6 pr-5 font-bold"
         [ngClass]="{ 'text-red-600': totalAmount < 0, 'text-green-600': totalAmount > 0 }">
         {{ totalAmount | currency }}
       </span>
     </div>
-    <div class="flex-1 h-32">
+    <div>
       <app-bar-chart [data]="chartData" />
     </div>
   </div>
-  <hr class="border-gray-500 mt-6 border-t-2" />
+  <hr class="border-gray-500 border-t-2" />
 </section>

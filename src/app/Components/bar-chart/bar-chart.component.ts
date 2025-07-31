@@ -81,14 +81,17 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
       .selectAll('text')
       .style('font-size', '10px')
       .style('fill', '#6b7280')
-      .attr('text-anchor', 'end');
+      .each(function (_, i) {
+        d3.select(this).attr('dy', i % 2 === 0 ? '0.8em' : '2em');
+      });
 
     // Eje Y
     svg
       .append('g')
-      .call(d3.axisLeft(y).ticks(5))
+      .call(d3.axisLeft(y).ticks(10))
       .selectAll('text')
       .style('font-size', '10px')
+      .style('radius', '10px')
       .style('fill', '#6b7280');
 
     // Barras + tooltip
@@ -96,15 +99,28 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
       .selectAll('.bar')
       .data(this.data)
       .enter()
-      .append('rect')
-      .attr('class', 'bar')
-      .attr('x', d => x(d.category) ?? 0)
-      .attr('y', d => y(d.amount))
-      .attr('width', x.bandwidth())
-      .attr('height', d => innerHeight - y(d.amount))
-      .attr('fill', '#4e79a7')
+      .append('path')
+      .attr('fill', (_, i) => (i % 2 === 0 ? '#3b82f6' : '#bfdbfe'))
+      .attr('d', d => {
+        const xVal = x(d.category) ?? 0;
+        const yVal = y(d.amount);
+        const barWidth = x.bandwidth();
+        const barHeight = innerHeight - yVal;
+
+        const r = Math.min(6, barWidth / 2, barHeight);
+
+        return `
+        M${xVal},${yVal + r}
+        a${r},${r} 0 0 1 ${r},-${r}
+        h${barWidth - 2 * r}
+        a${r},${r} 0 0 1 ${r},${r}
+        v${barHeight - r}
+        h-${barWidth}
+        Z
+      `;
+      })
       .on('mouseover', (event, d) => {
-        tooltip.classed('hidden', false).html(`<strong>${d.category}</strong>: ${d.amount}`);
+        tooltip.classed('hidden', false).html(`$${d.amount}`);
       })
       .on('mousemove', event => {
         const [xPos, yPos] = d3.pointer(event);
