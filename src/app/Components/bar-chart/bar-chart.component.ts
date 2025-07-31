@@ -4,7 +4,6 @@ import {
   ElementRef,
   Input,
   OnChanges,
-  OnDestroy,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
@@ -17,16 +16,13 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   templateUrl: './bar-chart.component.html'
 })
-export class BarChartComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class BarChartComponent implements AfterViewInit, OnChanges {
   @ViewChild('chart', { static: true }) private chartContainer!: ElementRef;
+  @ViewChild('tooltipRef', { static: true }) private tooltipRef!: ElementRef;
   @Input() data: { category: string; amount: number }[] = [];
 
-  private resizeObserver?: ResizeObserver;
-
   ngAfterViewInit(): void {
-    this.resizeObserver = new ResizeObserver(() => this.createChart());
-    this.resizeObserver.observe(this.chartContainer.nativeElement);
-    this.createChart(); // Llamada inicial
+    this.createChart();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -35,29 +31,17 @@ export class BarChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    this.resizeObserver?.disconnect();
-  }
-
   private createChart(): void {
     const element = this.chartContainer.nativeElement;
+    const tooltip = d3.select(this.tooltipRef.nativeElement);
     const width = element.offsetWidth;
     const height = element.offsetHeight;
 
-    console.log('Creating chart with dimensions:', {
-      width,
-      height,
-      dataLength: this.data?.length
-    });
+    if (width === 0 || height === 0) return;
 
-    if (width === 0 || height === 0) {
-      console.log('Container has no dimensions, skipping chart creation');
-      return;
-    }
+    d3.select(element).selectAll('svg').remove();
 
-    d3.select(element).selectAll('*').remove();
-
-    const margin = { top: 5, right: 5, bottom: 15, left: 20 };
+    const margin = { top: 10, right: 10, bottom: 50, left: 35 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
@@ -70,7 +54,6 @@ export class BarChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     if (!this.data || this.data.length === 0) {
-      console.log('No data available, showing message');
       svg
         .append('text')
         .attr('x', innerWidth / 2)
@@ -81,8 +64,6 @@ export class BarChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       return;
     }
 
-    console.log('Creating chart with data:', this.data);
-
     const x = d3
       .scaleBand()
       .domain(this.data.map(d => d.category))
@@ -90,35 +71,47 @@ export class BarChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       .padding(0.2);
 
     const yMax = d3.max(this.data, d => d.amount) ?? 0;
-
     const y = d3.scaleLinear().domain([0, yMax]).range([innerHeight, 0]);
 
+    // Eje X
     svg
       .append('g')
       .attr('transform', `translate(0,${innerHeight})`)
       .call(d3.axisBottom(x))
       .selectAll('text')
-      .style('font-size', '8px')
-      .attr('transform', 'rotate(-45)')
+      .style('font-size', '10px')
+      .style('fill', '#6b7280')
       .attr('text-anchor', 'end');
 
-    svg.append('g').call(d3.axisLeft(y)).selectAll('text').style('font-size', '8px');
+    // Eje Y
+    svg
+      .append('g')
+      .call(d3.axisLeft(y).ticks(5))
+      .selectAll('text')
+      .style('font-size', '10px')
+      .style('fill', '#6b7280');
 
+    // Barras + tooltip
     svg
       .selectAll('.bar')
       .data(this.data)
       .enter()
       .append('rect')
       .attr('class', 'bar')
-      .attr('x', d => {
-        const xValue = x(d.category);
-        return xValue !== undefined ? xValue : 0;
-      })
+      .attr('x', d => x(d.category) ?? 0)
       .attr('y', d => y(d.amount))
       .attr('width', x.bandwidth())
       .attr('height', d => innerHeight - y(d.amount))
-      .attr('fill', '#4e79a7');
-
-    console.log('Chart created successfully');
+      .attr('fill', '#4e79a7')
+      .on('mouseover', (event, d) => {
+        tooltip.classed('hidden', false).html(`<strong>${d.category}</strong>: ${d.amount}`);
+      })
+      .on('mousemove', event => {
+        const [xPos, yPos] = d3.pointer(event);
+        tooltip.style('left', `${xPos + 15}px`).style('top', `${yPos - 20}px`);
+      })
+      .on('mouseout', () => {
+        tooltip.classed('hidden', true);
+      });
   }
 }
