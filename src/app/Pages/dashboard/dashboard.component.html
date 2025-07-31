@@ -15,4 +15,5 @@
     <app-add-transaction-button (action)="openModal()" />
     <app-modal [show]="isModalOpen" [defaultView]="'add'" (close)="closeModal()" (next)="closeModal()" />
   </div>
+  <app-bar-chart [data]="chartData" />
 </div>

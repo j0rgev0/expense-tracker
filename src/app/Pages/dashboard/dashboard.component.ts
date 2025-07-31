@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { HeaderInfoDashboardComponent } from '../../Components/header-info-dashboard/header-info-dashboard.component';
 import { AccordionTransactionComponent } from '../../Components/accordion-transaction/accordion-transaction.component';
 import { TransactionService } from '../../Services/transactions.service';
@@ -12,12 +12,14 @@ import {
 import { AddTransactionButtonComponent } from '../../Components/add-transaction-button/add-transaction-button.component';
 import { FiltersComponent } from '../../Components/filters/filters.component';
 import { ModalComponent } from '../../Components/modal/modal.component';
+import { BarChartComponent } from '../../Components/bar-chart/bar-chart.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     CommonModule,
+    BarChartComponent,
     HeaderInfoDashboardComponent,
     AccordionTransactionComponent,
     FiltersComponent,
@@ -26,7 +28,7 @@ import { ModalComponent } from '../../Components/modal/modal.component';
   ],
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   // lists
   transactionsListFiltered: Transaction[] = [];
   transactionsList: Transaction[] = [];
@@ -92,5 +94,34 @@ export class DashboardComponent {
 
   closeModal() {
     this.isModalOpen = false;
+  }
+
+  chartData: { category: string; amount: number }[] = [];
+  transactions: Transaction[] = [];
+
+  ngOnInit(): void {
+    this.transactionService.transactions$.subscribe(transactions => {
+      this.transactions = transactions;
+      this.updateChartData();
+    });
+  }
+
+  private updateChartData(): void {
+    const categoryTotals = new Map<string, number>();
+
+    this.transactions.forEach(transaction => {
+      const currentTotal = categoryTotals.get(transaction.category) || 0;
+      categoryTotals.set(transaction.category, currentTotal + transaction.amount);
+    });
+
+    // Convertir a formato requerido por el gráfico
+    this.chartData = Array.from(categoryTotals.entries()).map(([category, amount]) => ({
+      category,
+      amount
+    }));
+  }
+
+  get totalAmount(): number {
+    return this.transactionService.calculateTotalAmount();
   }
 }
