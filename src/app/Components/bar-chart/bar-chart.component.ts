@@ -41,17 +41,22 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
 
     d3.select(element).selectAll('svg').remove();
 
-    const margin = { top: 10, right: 10, bottom: 50, left: 35 };
+    const margin = { top: 30, right: 10, bottom: 50, left: 35 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
-    const svg = d3
-      .select(element)
-      .append('svg')
-      .attr('width', width)
-      .attr('height', height)
-      .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
+    const svgElement = d3.select(element).append('svg').attr('width', width).attr('height', height);
+
+    // Título
+    svgElement
+      .append('text')
+      .attr('x', width / 2)
+      .attr('y', 20)
+      .attr('text-anchor', 'middle')
+      .attr('class', 'text-sm font-semibold fill-gray-700')
+      .text('Distribution of Expenses');
+
+    const svg = svgElement.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
     if (!this.data || this.data.length === 0) {
       svg
@@ -91,35 +96,113 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
       .call(d3.axisLeft(y).ticks(10))
       .selectAll('text')
       .style('font-size', '10px')
-      .style('radius', '10px')
-      .style('fill', '#6b7280')
+      .style('fill', '#6b7280');
+
+    const bars = svg
+      .selectAll<SVGPathElement, (typeof this.data)[0]>('.bar')
+      .data(this.data, d => d.category);
+
+    bars.join(
+      enter =>
+        enter
+          .append('path')
+          .attr('class', 'bar')
+          .attr('fill', (_, i) => (i % 2 === 0 ? '#3b82f6' : '#bfdbfe'))
+          .attr('d', d => {
+            const xVal = x(d.category) ?? 0;
+            const barWidth = x.bandwidth();
+            const r = Math.min(6, barWidth / 2, 0);
+            return `
+              M${xVal},${innerHeight}
+              a${r},${r} 0 0 1 ${r},0
+              h${barWidth - 2 * r}
+              a${r},${r} 0 0 1 ${r},0
+              v0
+              h-${barWidth}
+              Z
+            `;
+          })
+          .on('mouseover', (event, d) => {
+            tooltip.classed('hidden', false).html(`$${d.amount}`);
+          })
+          .on('mousemove', event => {
+            const [xPos, yPos] = d3.pointer(event);
+            tooltip.style('left', `${xPos + 15}px`).style('top', `${yPos - 20}px`);
+          })
+          .on('mouseout', () => {
+            tooltip.classed('hidden', true);
+          })
+          .transition()
+          .duration(600)
+          .attr('d', d => {
+            const xVal = x(d.category) ?? 0;
+            const yVal = y(d.amount);
+            const barWidth = x.bandwidth();
+            const barHeight = innerHeight - yVal;
+            const r = Math.min(6, barWidth / 2, barHeight);
+            return `
+              M${xVal},${yVal + r}
+              a${r},${r} 0 0 1 ${r},-${r}
+              h${barWidth - 2 * r}
+              a${r},${r} 0 0 1 ${r},${r}
+              v${barHeight - r}
+              h-${barWidth}
+              Z
+            `;
+          }),
+
+      update =>
+        update
+          .on('mouseover', (event, d) => {
+            tooltip.classed('hidden', false).html(`$${d.amount}`);
+          })
+          .on('mousemove', event => {
+            const [xPos, yPos] = d3.pointer(event);
+            tooltip.style('left', `${xPos + 15}px`).style('top', `${yPos - 20}px`);
+          })
+          .on('mouseout', () => {
+            tooltip.classed('hidden', true);
+          })
+          .transition()
+          .duration(600)
+          .attr('d', d => {
+            const xVal = x(d.category) ?? 0;
+            const yVal = y(d.amount);
+            const barWidth = x.bandwidth();
+            const barHeight = innerHeight - yVal;
+            const r = Math.min(6, barWidth / 2, barHeight);
+            return `
+              M${xVal},${yVal + r}
+              a${r},${r} 0 0 1 ${r},-${r}
+              h${barWidth - 2 * r}
+              a${r},${r} 0 0 1 ${r},${r}
+              v${barHeight - r}
+              h-${barWidth}
+              Z
+            `;
+          }),
+      exit =>
+        exit
+          .transition()
+          .duration(400)
+          .attr('d', d => {
+            const xVal = x(d.category) ?? 0;
+            const barWidth = x.bandwidth();
+            const r = Math.min(6, barWidth / 2, 0);
+            return `
+                M${xVal},${innerHeight}
+                a${r},${r} 0 0 1 ${r},0
+                h${barWidth - 2 * r}
+                a${r},${r} 0 0 1 ${r},0
+                v0
+                h-${barWidth}
+                Z
+              `;
+          })
+          .remove()
+    );
 
     // Barras + tooltip
-
-    svg
-      .selectAll('.bar')
-      .data(this.data)
-      .enter()
-      .append('rect')
-      .attr('class', 'bar')
-      .attr('x', d => x(d.category) ?? 0)
-      .attr('y', d => y(d.amount))
-      .attr('width', x.bandwidth())
-      .attr('height', d => innerHeight - y(d.amount))
-      .attr('fill', (_, i) => (i % 2 === 0 ? '#3b82f6' : '#bfdbfe'))
-      .attr('rx', 6) // redondeo horizontal
-      .attr('ry', 6) // redondeo vertical
-      .on('mouseover', (event, d) => {
-        tooltip.classed('hidden', false).html(`<strong>${d.category}</strong>: ${d.amount}`);
-      })
-      .on('mousemove', event => {
-        const [xPos, yPos] = d3.pointer(event);
-        tooltip.style('left', `${xPos + 15}px`).style('top', `${yPos - 20}px`);
-      })
-      .on('mouseout', () => {
-        tooltip.classed('hidden', true);
-      });
-
     // svg
     //   .selectAll('.bar')
     //   .data(this.data)

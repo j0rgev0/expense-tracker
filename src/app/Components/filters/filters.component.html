@@ -1,27 +1,65 @@
 <div class="flex gap-2 w-full justify-between items-center">
-  <div class="flex gap-4 flex-wrap">
+  <div class="flex gap-4 flex-wrap items-center">
+
     <select [(ngModel)]="selectedType" (ngModelChange)="emitByType($event)"
-      class="w-32 px-2 py-1 rounded-lg focus:ring-2 border border-gray-300 focus:ring-blue-500">
+      class="w-36 px-3 py-2 rounded-lg  border border-gray-300 focus:ring-2 focus:ring-blue-500">
       <option value="all">All</option>
       <option value="income">Income</option>
       <option value="expense">Expense</option>
     </select>
 
     <select [(ngModel)]="categorySelected" (ngModelChange)="emitByCategory($event)"
-      class="w-40 px-3 py-2 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+      class="w-36 px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
       <option value="all">All</option>
       <option class="capitalize" *ngFor="let c of listCategories" [value]="c">{{ c }}</option>
     </select>
 
-
     <input [(ngModel)]="selectedDate" (ngModelChange)="emitByDate($event)" type="date"
-      class="w-36 px-2 py-1 rounded-lg focus:ring-2 border border-gray-300 focus:ring-blue-500" />
+      class="w-36 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500" />
 
-    <div class="flex items-center gap-2">
-      <input [(ngModel)]="selectedAmount" (ngModelChange)="emitByAmount($event)" type="range" max="5000"
-        class="w-36 focus:ring-2 border border-gray-300 focus:ring-blue-500" />
-      <span>{{ selectedAmount }} €</span>
+    <!-- Slider mejorado para monto -->
+    <div class="flex flex-col gap-2 min-w-[200px]">
+      <div class="text-center">
+        <label class="text-sm font-medium text-gray-700">Amount Filter</label>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-gray-500">{{ formatAmount(minAmount) }}</span>
+        <div class="flex-1 relative">
+          <input [(ngModel)]="selectedAmount" (ngModelChange)="emitByAmount($event)" type="range" [min]="minAmount"
+            [max]="maxAmount" [step]="stepAmount"
+            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider" />
+        </div>
+        <span class="text-xs text-gray-500">{{ formatAmount(maxAmount) }}</span>
+      </div>
+
+      <div class="text-center">
+        <span class="text-sm font-medium text-blue-600">{{ formatAmount(selectedAmount) }}</span>
+        <span class="text-xs text-gray-500 ml-1">or more</span>
+      </div>
     </div>
+
+    <div *ngIf="getActiveFiltersCount() > 0"
+      class="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-medium rounded-full flex items-center gap-2 shadow-md filter-counter">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z">
+        </path>
+      </svg>
+      <span>{{ getActiveFiltersCount() }}</span>
+      <span>{{ getActiveFiltersCount() > 1 ? 'filters' : 'filter' }}</span>
+
+    </div>
+    <button *ngIf="getActiveFiltersCount() > 0" (click)="clearAllFilters()"
+      class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-medium rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg transform hover:scale-105">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+        </path>
+      </svg>
+      Clear All
+    </button>
+
   </div>
 
   <div class="relative">
