@@ -37,10 +37,13 @@ export class HeaderInfoDashboardComponent implements OnInit, OnChanges {
 
     const categoryTotals = new Map<string, number>();
 
-    transactionsToUse.forEach(transaction => {
-      const currentTotal = categoryTotals.get(transaction.category) || 0;
-      categoryTotals.set(transaction.category, currentTotal + transaction.amount);
-    });
+    // Solo incluir transacciones de tipo 'expense' (gastos)
+    transactionsToUse
+      .filter(transaction => transaction.type === 'expense')
+      .forEach(transaction => {
+        const currentTotal = categoryTotals.get(transaction.category) || 0;
+        categoryTotals.set(transaction.category, currentTotal + transaction.amount);
+      });
 
     // Convertir a formato requerido por el gráfico
     this.chartData = Array.from(categoryTotals.entries()).map(([category, amount]) => ({

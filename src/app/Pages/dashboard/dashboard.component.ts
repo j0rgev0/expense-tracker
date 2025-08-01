@@ -10,7 +10,7 @@ import {
   Transaction
 } from '../../Interface/Transaction';
 import { AddTransactionButtonComponent } from '../../Components/add-transaction-button/add-transaction-button.component';
-import { FiltersComponent } from '../../Components/filters/filters.component';
+import { FiltersComponent, FilterState } from '../../Components/filters/filters.component';
 import { ModalComponent } from '../../Components/modal/modal.component';
 import { BarChartComponent } from '../../Components/bar-chart/bar-chart.component';
 
@@ -36,54 +36,98 @@ export class DashboardComponent {
   // modal
   modalOpen: boolean = false;
 
+  // Estado actual de los filtros
+  currentFilters: FilterState = {
+    type: 'all',
+    category: 'all',
+    date: '',
+    amount: 0,
+    search: ''
+  };
+
   constructor(private transactionService: TransactionService) {
     this.transactionService.transactions$.subscribe(transactions => {
       this.transactionsList = transactions;
-      this.transactionsListFiltered = [...this.transactionsList];
+      this.applyFilters();
     });
   }
 
-  // filters
-  filterByType(typeSelected: 'income' | 'expense' | 'all') {
-    console.log(typeSelected);
-    if (typeSelected === 'all') {
-      this.transactionsListFiltered = [...this.transactionsList];
-    } else {
-      this.transactionsListFiltered = this.transactionsList.filter(t => t.type === typeSelected);
-    }
-  }
+  // Función principal para aplicar todos los filtros combinados
+  applyFilters() {
+    let filteredTransactions = [...this.transactionsList];
 
-  filterByCategory(categorySelected: AllCategories) {
-    if (categorySelected === 'all') {
-      this.transactionsListFiltered = [...this.transactionsList];
-    } else {
-      this.transactionsListFiltered = this.transactionsList.filter(
-        c => c.category === categorySelected
+    // Filtrar por tipo
+    if (this.currentFilters.type !== 'all') {
+      filteredTransactions = filteredTransactions.filter(t => t.type === this.currentFilters.type);
+    }
+
+    // Filtrar por categoría
+    if (this.currentFilters.category !== 'all') {
+      filteredTransactions = filteredTransactions.filter(
+        t => t.category === this.currentFilters.category
       );
     }
-  }
 
-  filterByDate(date: string) {
-    console.log(date);
-    if (date === '') {
-      this.transactionsListFiltered = [...this.transactionsList];
-    } else {
-      const selectedDate = new Date(date);
-
-      this.transactionsListFiltered = this.transactionsList.filter(c => {
-        const transactionDate = new Date(c.date);
+    // Filtrar por fecha
+    if (this.currentFilters.date !== '') {
+      const selectedDate = new Date(this.currentFilters.date);
+      filteredTransactions = filteredTransactions.filter(t => {
+        const transactionDate = new Date(t.date);
         return transactionDate >= selectedDate;
       });
     }
+
+    // Filtrar por monto mínimo (mejorado)
+    if (this.currentFilters.amount > 0) {
+      filteredTransactions = filteredTransactions.filter(
+        t => t.amount >= this.currentFilters.amount
+      );
+    }
+
+    // Filtrar por búsqueda en el título (mejorado)
+    if (this.currentFilters.search !== '') {
+      const searchTerm = this.currentFilters.search.toLowerCase().trim();
+      filteredTransactions = filteredTransactions.filter(
+        t =>
+          t.title.toLowerCase().includes(searchTerm) ||
+          t.category.toLowerCase().includes(searchTerm) ||
+          t.amount.toString().includes(searchTerm)
+      );
+    }
+
+    this.transactionsListFiltered = filteredTransactions;
+  }
+
+  // Manejador del evento de cambio de filtros
+  onFiltersChange(filters: FilterState) {
+    this.currentFilters = filters;
+    this.applyFilters();
+  }
+
+  // Métodos individuales (mantenidos para compatibilidad si es necesario)
+  filterByType(typeSelected: 'income' | 'expense' | 'all') {
+    this.currentFilters.type = typeSelected;
+    this.applyFilters();
+  }
+
+  filterByCategory(categorySelected: AllCategories) {
+    this.currentFilters.category = categorySelected;
+    this.applyFilters();
+  }
+
+  filterByDate(date: string) {
+    this.currentFilters.date = date;
+    this.applyFilters();
   }
 
   filterByAmount(amount: number) {
-    this.transactionsListFiltered = this.transactionsList.filter(c => c.amount >= amount);
+    this.currentFilters.amount = amount;
+    this.applyFilters();
   }
 
   filterByTitle(search: string) {
-    console.log(search);
-    this.transactionsListFiltered = this.transactionsList.filter(c => c.title.includes(search));
+    this.currentFilters.search = search;
+    this.applyFilters();
   }
 
   isModalOpen = false;

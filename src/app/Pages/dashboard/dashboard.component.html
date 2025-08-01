@@ -3,9 +3,7 @@
     <app-header-info-dashboard [filteredTransactions]="transactionsListFiltered" />
   </div>
   <div class="mt-6">
-    <app-filters (selectedTypeChange)="filterByType($event)" (selectedCategoryChange)="filterByCategory($event)"
-      (selectedDateChange)="filterByDate($event)" (selectedAmountChange)="filterByAmount($event)"
-      (selectedSearchChange)="filterByTitle($event)"></app-filters>
+    <app-filters (filtersChange)="onFiltersChange($event)"></app-filters>
   </div>
   <div class="flex flex-col justify-center overflow-y-auto">
     <app-accordion-transaction *ngFor="let transaction of transactionsListFiltered"
@@ -15,5 +13,4 @@
     <app-add-transaction-button (action)="openModal()" />
     <app-modal [show]="isModalOpen" [defaultView]="'add'" (close)="closeModal()" (next)="closeModal()" />
   </div>
-  <!-- <app-bar-chart [data]="transactionsListFiltered" /> -->
 </div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -6,45 +6,154 @@ import { TransactionService } from '../../Services/transactions.service';
 
 import { CATEGORIES } from '../../utils/consts';
 import { AllCategories } from '../../Interface/Transaction';
+
+// Interface para el estado de los filtros
+export interface FilterState {
+  type: 'income' | 'expense' | 'all';
+  category: AllCategories;
+  date: string;
+  amount: number;
+  search: string;
+}
+
 @Component({
   selector: 'app-filters',
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './filters.component.html'
 })
-export class FiltersComponent {
+export class FiltersComponent implements OnInit {
   listCategories = CATEGORIES;
-  // flags
-  @Output() selectedTypeChange = new EventEmitter<'income' | 'expense' | 'all'>();
-  @Output() selectedCategoryChange = new EventEmitter<AllCategories>();
-  @Output() selectedDateChange = new EventEmitter<string>();
-  @Output() selectedAmountChange = new EventEmitter<number>();
-  @Output() selectedSearchChange = new EventEmitter<string>();
 
+  // Emitir el estado completo de los filtros
+  @Output() filtersChange = new EventEmitter<FilterState>();
+
+  // Estado de los filtros
   selectedType: 'income' | 'expense' | 'all' = 'all';
   categorySelected: AllCategories = 'all';
   selectedDate: string = '';
   selectedAmount: number = 0;
   search: string = '';
 
-  constructor() {}
+  // Propiedades para el slider mejorado
+  minAmount: number = 0;
+  maxAmount: number = 1000;
+  stepAmount: number = 10;
+
+  constructor(private transactionService: TransactionService) {}
+
+  ngOnInit() {
+    this.calculateAmountRange();
+    this.transactionService.transactions$.subscribe(() => {
+      this.calculateAmountRange();
+    });
+  }
+
+  private calculateAmountRange() {
+    const transactions = this.transactionService.getAllTransactions();
+
+    if (transactions.length === 0) {
+      this.minAmount = 0;
+      this.maxAmount = 1000;
+      this.stepAmount = 10;
+      return;
+    }
+
+    const amounts = transactions.map(t => t.amount);
+    this.minAmount = Math.floor(Math.min(...amounts) / 10) * 10;
+    this.maxAmount = Math.floor(Math.max(...amounts) / 10) * 10;
+
+    // Asegurar un rango mínimo
+    if (this.maxAmount - this.minAmount < 100) {
+      this.maxAmount = this.minAmount + 100;
+    }
+
+    // Ajustar el step basado en el rango
+    const range = this.maxAmount - this.minAmount;
+    if (range <= 100) {
+      this.stepAmount = 5;
+    } else if (range <= 500) {
+      this.stepAmount = 10;
+    } else if (range <= 1000) {
+      this.stepAmount = 25;
+    } else {
+      this.stepAmount = 50;
+    }
+
+    // Resetear el valor seleccionado si está fuera del nuevo rango
+    if (this.selectedAmount < this.minAmount || this.selectedAmount > this.maxAmount) {
+      this.selectedAmount = this.minAmount;
+    }
+  }
+
+  // Función para emitir el estado completo de los filtros
+  private emitFilters() {
+    const filterState: FilterState = {
+      type: this.selectedType,
+      category: this.categorySelected,
+      date: this.selectedDate,
+      amount: this.selectedAmount,
+      search: this.search
+    };
+    this.filtersChange.emit(filterState);
+  }
 
   emitByType(typeSelected: 'income' | 'expense' | 'all') {
-    this.selectedTypeChange.emit(typeSelected);
+    this.selectedType = typeSelected;
+    this.emitFilters();
   }
 
   emitByCategory(event: AllCategories) {
-    this.selectedCategoryChange.emit(event);
+    this.categorySelected = event;
+    this.emitFilters();
   }
 
   emitByDate(event: string) {
-    this.selectedDateChange.emit(event);
+    this.selectedDate = event;
+    this.emitFilters();
   }
 
   emitByAmount(event: number) {
-    this.selectedAmountChange.emit(event);
+    this.selectedAmount = event;
+    this.emitFilters();
   }
+
+  onAmountInputChange(event: any) {
+    const value = parseInt(event.target.value);
+    if (!isNaN(value)) {
+      this.selectedAmount = Math.max(this.minAmount, Math.min(this.maxAmount, value));
+      this.emitFilters();
+    }
+  }
+
   emitBySearch(event: string) {
-    this.selectedSearchChange.emit(event);
+    this.search = event;
+    this.emitFilters();
+  }
+
+  clearAllFilters() {
+    this.selectedType = 'all';
+    this.categorySelected = 'all';
+    this.selectedDate = '';
+    this.selectedAmount = this.minAmount;
+    this.search = '';
+    this.emitFilters();
+  }
+
+  // Método para contar filtros activos
+  getActiveFiltersCount(): number {
+    let count = 0;
+
+    if (this.selectedType !== 'all') count++;
+    if (this.categorySelected !== 'all') count++;
+    if (this.selectedDate !== '') count++;
+    if (this.selectedAmount > this.minAmount) count++;
+    if (this.search !== '') count++;
+
+    return count;
+  }
+
+  formatAmount(amount: number): string {
+    return amount.toLocaleString('es-ES') + ' €';
   }
 }
