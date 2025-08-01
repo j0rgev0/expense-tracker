@@ -19,7 +19,6 @@ import { BarChartComponent } from '../../Components/bar-chart/bar-chart.componen
   standalone: true,
   imports: [
     CommonModule,
-    BarChartComponent,
     HeaderInfoDashboardComponent,
     AccordionTransactionComponent,
     FiltersComponent,
