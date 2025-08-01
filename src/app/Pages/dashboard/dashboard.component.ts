@@ -19,6 +19,7 @@ import { BarChartComponent } from '../../Components/bar-chart/bar-chart.componen
   standalone: true,
   imports: [
     CommonModule,
+    // BarChartComponent,
     HeaderInfoDashboardComponent,
     AccordionTransactionComponent,
     FiltersComponent,
@@ -27,7 +28,7 @@ import { BarChartComponent } from '../../Components/bar-chart/bar-chart.componen
   ],
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
   // lists
   transactionsListFiltered: Transaction[] = [];
   transactionsList: Transaction[] = [];
@@ -93,34 +94,5 @@ export class DashboardComponent implements OnInit {
 
   closeModal() {
     this.isModalOpen = false;
-  }
-
-  chartData: { category: string; amount: number }[] = [];
-  transactions: Transaction[] = [];
-
-  ngOnInit(): void {
-    this.transactionService.transactions$.subscribe(transactions => {
-      this.transactions = transactions;
-      this.updateChartData();
-    });
-  }
-
-  private updateChartData(): void {
-    const categoryTotals = new Map<string, number>();
-
-    this.transactions.forEach(transaction => {
-      const currentTotal = categoryTotals.get(transaction.category) || 0;
-      categoryTotals.set(transaction.category, currentTotal + transaction.amount);
-    });
-
-    // Convertir a formato requerido por el gráfico
-    this.chartData = Array.from(categoryTotals.entries()).map(([category, amount]) => ({
-      category,
-      amount
-    }));
-  }
-
-  get totalAmount(): number {
-    return this.transactionService.calculateTotalAmount();
   }
 }

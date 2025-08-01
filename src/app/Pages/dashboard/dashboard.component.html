@@ -1,6 +1,6 @@
 <div class="max-w-7xl w-full mx-auto">
   <div>
-    <app-header-info-dashboard [data]="transactionsListFiltered" />
+    <app-header-info-dashboard [filteredTransactions]="transactionsListFiltered" />
   </div>
   <div class="mt-6">
     <app-filters (selectedTypeChange)="filterByType($event)" (selectedCategoryChange)="filterByCategory($event)"
