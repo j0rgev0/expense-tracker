@@ -25,17 +25,14 @@ export interface FilterState {
 export class FiltersComponent implements OnInit {
   listCategories = CATEGORIES;
 
-  // Emitir el estado completo de los filtros
   @Output() filtersChange = new EventEmitter<FilterState>();
 
-  // Estado de los filtros
   selectedType: 'income' | 'expense' | 'all' = 'all';
   categorySelected: AllCategories = 'all';
   selectedDate: string = '';
   selectedAmount: number = 0;
   search: string = '';
 
-  // Propiedades para el slider mejorado
   minAmount: number = 0;
   maxAmount: number = 1000;
   stepAmount: number = 10;
@@ -63,12 +60,10 @@ export class FiltersComponent implements OnInit {
     this.minAmount = Math.floor(Math.min(...amounts) / 10) * 10;
     this.maxAmount = Math.floor(Math.max(...amounts) / 10) * 10;
 
-    // Asegurar un rango mínimo
     if (this.maxAmount - this.minAmount < 100) {
       this.maxAmount = this.minAmount + 100;
     }
 
-    // Ajustar el step basado en el rango
     const range = this.maxAmount - this.minAmount;
     if (range <= 100) {
       this.stepAmount = 5;
@@ -80,13 +75,11 @@ export class FiltersComponent implements OnInit {
       this.stepAmount = 50;
     }
 
-    // Resetear el valor seleccionado si está fuera del nuevo rango
     if (this.selectedAmount < this.minAmount || this.selectedAmount > this.maxAmount) {
       this.selectedAmount = this.minAmount;
     }
   }
 
-  // Función para emitir el estado completo de los filtros
   private emitFilters() {
     const filterState: FilterState = {
       type: this.selectedType,
@@ -140,7 +133,6 @@ export class FiltersComponent implements OnInit {
     this.emitFilters();
   }
 
-  // Método para contar filtros activos
   getActiveFiltersCount(): number {
     let count = 0;
 

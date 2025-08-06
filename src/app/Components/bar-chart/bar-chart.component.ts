@@ -78,17 +78,27 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
     const yMax = d3.max(this.data, d => d.amount) ?? 0;
     const y = d3.scaleLinear().domain([0, yMax]).range([innerHeight, 0]);
 
-   
-    svg
-      .append('g')
-      .attr('transform', `translate(0,${innerHeight})`)
-      .call(d3.axisBottom(x))
+    const axis = d3.axisBottom(x);
+
+    // Creamos manualmente el grupo del eje
+    const xAxisGroup = svg.append('g').attr('transform', `translate(0,${innerHeight})`).call(axis);
+
+    // Ajustamos los textos
+    xAxisGroup
       .selectAll('text')
       .style('font-size', '10px')
       .style('fill', '#6b7280')
-      .each(function (_, i) {
-        d3.select(this).attr('dy', i % 2 === 0 ? '0.8em' : '2em');
-      });
+      .style('font-family', 'sans-serif')
+      .style('cursor', 'default')
+      .attr('text-anchor', 'middle')
+      .attr('dy', (_, i) => (i % 2 === 0 ? '0.8em' : '1.8em'));
+
+    // Ajustamos el tamaño de las líneas (ticks) del eje
+    xAxisGroup
+      .selectAll('.tick line')
+      .attr('y2', (_, i) => (i % 2 === 0 ? 6 : 12)) // más largos los que están más abajo
+      .attr('stroke', '#6b7280')
+      .attr('stroke-width', 1);
 
     svg
       .append('g')

@@ -29,14 +29,13 @@ import { BarChartComponent } from '../../Components/bar-chart/bar-chart.componen
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
-  // lists
+
   transactionsListFiltered: Transaction[] = [];
   transactionsList: Transaction[] = [];
 
-  // modal
+
   modalOpen: boolean = false;
 
-  // Estado actual de los filtros
   currentFilters: FilterState = {
     type: 'all',
     category: 'all',
