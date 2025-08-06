@@ -51,23 +51,23 @@ export class DashboardComponent {
     });
   }
 
-  // Función principal para aplicar todos los filtros combinados
+
   applyFilters() {
     let filteredTransactions = [...this.transactionsList];
 
-    // Filtrar por tipo
+
     if (this.currentFilters.type !== 'all') {
       filteredTransactions = filteredTransactions.filter(t => t.type === this.currentFilters.type);
     }
 
-    // Filtrar por categoría
+
     if (this.currentFilters.category !== 'all') {
       filteredTransactions = filteredTransactions.filter(
         t => t.category === this.currentFilters.category
       );
     }
 
-    // Filtrar por fecha
+
     if (this.currentFilters.date !== '') {
       const selectedDate = new Date(this.currentFilters.date);
       filteredTransactions = filteredTransactions.filter(t => {
@@ -76,14 +76,14 @@ export class DashboardComponent {
       });
     }
 
-    // Filtrar por monto mínimo (mejorado)
+
     if (this.currentFilters.amount > 0) {
       filteredTransactions = filteredTransactions.filter(
         t => t.amount >= this.currentFilters.amount
       );
     }
 
-    // Filtrar por búsqueda en el título (mejorado)
+
     if (this.currentFilters.search !== '') {
       const searchTerm = this.currentFilters.search.toLowerCase().trim();
       filteredTransactions = filteredTransactions.filter(
@@ -97,13 +97,12 @@ export class DashboardComponent {
     this.transactionsListFiltered = filteredTransactions;
   }
 
-  // Manejador del evento de cambio de filtros
+
   onFiltersChange(filters: FilterState) {
     this.currentFilters = filters;
     this.applyFilters();
   }
 
-  // Métodos individuales (mantenidos para compatibilidad si es necesario)
   filterByType(typeSelected: 'income' | 'expense' | 'all') {
     this.currentFilters.type = typeSelected;
     this.applyFilters();
