@@ -85,7 +85,8 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
       .call(d3.axisBottom(x).tickFormat((d: string) => CATEGORY_ABBREVIATIONS[d] ?? d))
       .selectAll('text')
       .style('font-size', '10px')
-      .style('fill', '#6b7280');
+      .style('fill', '#6b7280')
+      .style('text-transform', 'capitalize');
 
     svg
       .append('g')
