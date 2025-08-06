@@ -29,7 +29,7 @@ export const CATEGORIES = [
   'other'
 ] as const;
 
-export const CATEGORY_ABBREVIATIONS = {
+export const CATEGORY_ABBREVIATIONS: Record<string, string> = {
   housing: 'house',
   utilities: 'util',
   groceries: 'groc',

@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import * as d3 from 'd3';
 import { CommonModule } from '@angular/common';
+import { CATEGORY_ABBREVIATIONS } from '../../utils/consts';
 
 @Component({
   selector: 'app-bar-chart',
@@ -78,17 +79,13 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
     const yMax = d3.max(this.data, d => d.amount) ?? 0;
     const y = d3.scaleLinear().domain([0, yMax]).range([innerHeight, 0]);
 
-   
     svg
       .append('g')
       .attr('transform', `translate(0,${innerHeight})`)
-      .call(d3.axisBottom(x))
+      .call(d3.axisBottom(x).tickFormat((d: string) => CATEGORY_ABBREVIATIONS[d] ?? d))
       .selectAll('text')
       .style('font-size', '10px')
-      .style('fill', '#6b7280')
-      .each(function (_, i) {
-        d3.select(this).attr('dy', i % 2 === 0 ? '0.8em' : '2em');
-      });
+      .style('fill', '#6b7280');
 
     svg
       .append('g')
