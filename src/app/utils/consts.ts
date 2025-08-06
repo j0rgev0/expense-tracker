@@ -29,6 +29,37 @@ export const CATEGORIES = [
   'other'
 ] as const;
 
+export const CATEGORY_ABBREVIATIONS: Record<string, string> = {
+  housing: 'house',
+  utilities: 'util',
+  groceries: 'groc',
+  transportation: 'trans',
+  insurance: 'insur',
+  healthcare: 'hlth',
+  entertainment: 'entmt',
+  subscriptions: 'subsc',
+  education: 'educ',
+  clothing: 'cloth',
+  personalCare: 'persn',
+  debt: 'debt',
+  savings: 'savng',
+  donation: 'donat',
+  travel: 'trvl',
+  taxes: 'taxes',
+  salary: 'salry',
+  freelance: 'free',
+  investment: 'invst',
+  interest: 'intst',
+  rental: 'rentl',
+  dividends: 'divid',
+  business: 'biz',
+  refund: 'rfnd',
+  gift: 'gift',
+  bonus: 'bonus',
+  sale: 'sale',
+  other: 'other'
+};
+
 export const INCOMECAT = [
   'salary',
   'freelance',
