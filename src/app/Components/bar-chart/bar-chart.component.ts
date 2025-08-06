@@ -78,7 +78,7 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
     const yMax = d3.max(this.data, d => d.amount) ?? 0;
     const y = d3.scaleLinear().domain([0, yMax]).range([innerHeight, 0]);
 
-    // Eje X
+   
     svg
       .append('g')
       .attr('transform', `translate(0,${innerHeight})`)
@@ -90,7 +90,6 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
         d3.select(this).attr('dy', i % 2 === 0 ? '0.8em' : '2em');
       });
 
-    // Eje Y
     svg
       .append('g')
       .call(d3.axisLeft(y).ticks(10))

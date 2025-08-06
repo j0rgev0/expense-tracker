@@ -1,75 +1,67 @@
-<div class="flex gap-2 w-full justify-between items-center">
-  <div class="flex gap-4 flex-wrap items-center">
+<div class="flex flex-wrap gap-3 w-full justify-between items-center">
+  <div class="flex flex-wrap gap-3 items-center">
 
+    <!-- Tipo de transacción -->
     <select [(ngModel)]="selectedType" (ngModelChange)="emitByType($event)"
-      class="w-36 px-3 py-2 rounded-lg  border border-gray-300 focus:ring-2 focus:ring-blue-500">
+      class="w-32 px-3 py-1.5 rounded-md border border-gray-300 text-sm">
       <option value="all">All</option>
       <option value="income">Income</option>
       <option value="expense">Expense</option>
     </select>
 
+    <!-- Categoría -->
     <select [(ngModel)]="categorySelected" (ngModelChange)="emitByCategory($event)"
-      class="w-36 px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
+      class="w-32 px-3 py-1.5 rounded-md border border-gray-300 text-sm">
       <option value="all">All</option>
-      <option class="capitalize" *ngFor="let c of listCategories" [value]="c">{{ c }}</option>
+      <option *ngFor="let c of listCategories" class="capitalize" [value]="c">{{ c }}</option>
     </select>
 
+    <!-- Fecha -->
     <input [(ngModel)]="selectedDate" (ngModelChange)="emitByDate($event)" type="date"
-      class="w-36 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500" />
+      class="w-36 px-3 py-1.5 rounded-md border border-gray-300 text-sm" />
 
-    <!-- Slider mejorado para monto -->
-    <div class="flex flex-col gap-2 min-w-[200px]">
-      <div class="text-center">
-        <label class="text-sm font-medium text-gray-700">Amount Filter</label>
-      </div>
-
-      <div class="flex items-center gap-3">
+    <!-- Rango de monto -->
+    <div class="flex flex-col text-center gap-1 min-w-[180px]">
+      <label class="text-sm text-gray-600">Amount</label>
+      <div class="flex items-center gap-2">
         <span class="text-xs text-gray-500">{{ formatAmount(minAmount) }}</span>
-        <div class="flex-1 relative">
-          <input [(ngModel)]="selectedAmount" (ngModelChange)="emitByAmount($event)" type="range" [min]="minAmount"
-            [max]="maxAmount" [step]="stepAmount"
-            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider" />
-        </div>
+        <input [(ngModel)]="selectedAmount" (ngModelChange)="emitByAmount($event)" type="range" [min]="minAmount"
+          [max]="maxAmount" [step]="stepAmount"
+          class="w-full h-1 bg-gray-200 rounded-md appearance-none cursor-pointer" />
         <span class="text-xs text-gray-500">{{ formatAmount(maxAmount) }}</span>
       </div>
-
-      <div class="text-center">
-        <span class="text-sm font-medium text-blue-600">{{ formatAmount(selectedAmount) }}</span>
-        <span class="text-xs text-gray-500 ml-1">or more</span>
-      </div>
+      <div class="text-xs text-blue-600 text-center">{{ formatAmount(selectedAmount) }} or more</div>
     </div>
 
+    <!-- Filtros activos -->
     <div *ngIf="getActiveFiltersCount() > 0"
-      class="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-medium rounded-full flex items-center gap-2 shadow-md filter-counter">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z">
-        </path>
-      </svg>
-      <span>{{ getActiveFiltersCount() }}</span>
-      <span>{{ getActiveFiltersCount() > 1 ? 'filters' : 'filter' }}</span>
+      class="flex items-center gap-3 px-3 py-1.5 border border-blue-300 bg-blue-50 text-sm text-blue-700 rounded-md">
 
-    </div>
-    <button *ngIf="getActiveFiltersCount() > 0" (click)="clearAllFilters()"
-      class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-medium rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg transform hover:scale-105">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-        </path>
+          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
       </svg>
-      Clear All
-    </button>
+
+      <span class="font-medium">
+        {{ getActiveFiltersCount() }} {{ getActiveFiltersCount() > 1 ? 'filters active' : 'filter active' }}
+      </span>
+
+      <button (click)="clearAllFilters()"
+        class="ml-auto px-2 py-1 text-xs text-red-600 border border-red-300 bg-red-50 rounded hover:bg-red-100 transition">
+        Clear all
+      </button>
+    </div>
 
   </div>
 
-  <div class="relative">
-    <svg class="w-5 h-5 absolute top-1/2 left-2 transform -translate-y-1/2 text-gray-500" aria-hidden="true"
-      xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <!-- Buscador -->
+  <div class="relative w-64">
+    <svg class="w-4 h-4 absolute top-1/2 left-2 transform -translate-y-1/2 text-gray-400"
+      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
       <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
         d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
     </svg>
-
     <input [(ngModel)]="search" (ngModelChange)="emitBySearch($event)" type="text" placeholder="Search transactions"
-      class="w-full pl-8 pr-2 py-1 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      class="w-full pl-8 pr-2 py-1.5 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400" />
   </div>
 </div>
