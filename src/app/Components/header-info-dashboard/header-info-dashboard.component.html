@@ -6,9 +6,11 @@
         {{ totalAmount | currency }}
       </span>
     </div>
-    <div>
-      <app-bar-chart [data]="chartData" />
-    </div>
+
+
+    <app-bar-chart [data]="chartData" />
+
+    <app-pie-chart [data]="chartData" />
   </div>
   <hr class="border-gray-500 border-t-2" />
 </section>

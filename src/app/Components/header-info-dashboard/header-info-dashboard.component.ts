@@ -3,11 +3,12 @@ import { TransactionService } from '../../Services/transactions.service';
 import { CommonModule } from '@angular/common';
 import { BarChartComponent } from '../bar-chart/bar-chart.component';
 import { Transaction } from '../../Interface/Transaction';
+import { PieChartComponent } from '../pie-chart/pie-chart.component';
 
 @Component({
   selector: 'app-header-info-dashboard',
   standalone: true,
-  imports: [CommonModule, BarChartComponent],
+  imports: [CommonModule, BarChartComponent, PieChartComponent],
   templateUrl: './header-info-dashboard.component.html'
 })
 export class HeaderInfoDashboardComponent implements OnInit, OnChanges {
