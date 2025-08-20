@@ -22,7 +22,6 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
   @ViewChild('tooltipRef', { static: true }) private tooltipRef!: ElementRef;
   @Input() data: { category: string; amount: number }[] = [];
 
-  // Paleta de colores personalizada que se adapta mejor al diseño
   private readonly colorPalette = [
     '#3B82F6', // blue-500
     '#10B981', // emerald-500
@@ -74,7 +73,6 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
       .attr('y', 25)
       .attr('text-anchor', 'middle')
       .attr('class', 'text-base font-bold fill-gray-800')
-      .style('font-family', 'Inter, system-ui, sans-serif')
       .text('Distribución de Gastos');
 
     if (!this.data || this.data.length === 0) {
@@ -82,7 +80,6 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
         .append('text')
         .attr('text-anchor', 'middle')
         .attr('class', 'fill-gray-400 text-sm font-medium')
-        .style('font-family', 'Inter, system-ui, sans-serif')
         .text('Sin datos disponibles');
       return;
     }
@@ -96,7 +93,7 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
     const arc = d3
       .arc<d3.PieArcDatum<{ category: string; amount: number }>>()
       .innerRadius(0)
-      .outerRadius(radius - 15); // Más espacio para mejor separación
+      .outerRadius(radius - 34);
 
     // Usar paleta de colores personalizada
     const color = d3
@@ -111,14 +108,9 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
       .append('path')
       .attr('d', arc)
       .attr('fill', (_, i) => color(String(i)) as string)
-      .attr('stroke', '#ffffff') // Borde blanco para mejor separación
       .attr('stroke-width', 2)
-      .style('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))') // Sombra sutil
       .on('mouseover', (event, d) => {
-        // Resaltar el slice al hacer hover
-        d3.select(event.currentTarget)
-          .style('filter', 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))')
-          .style('transform', 'scale(1.02)');
+        d3.select(event.currentTarget).style('transform', 'scale(1.02)');
 
         tooltip.classed('hidden', false).html(`
             <div class="font-semibold text-white">${d.data.category}</div>
@@ -130,11 +122,9 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
         tooltip.style('left', `${xPos + 15}px`).style('top', `${yPos - 20}px`);
       })
       .on('mouseout', event => {
-        // Restaurar el slice al estado normal
         d3.select(event.currentTarget)
           .style('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))')
           .style('transform', 'scale(1)');
-
         tooltip.classed('hidden', true);
       });
 
@@ -146,7 +136,6 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
       .append('text')
       .attr('class', 'slice text-[11px] fill-white font-bold')
       .style('font-family', 'Inter, system-ui, sans-serif')
-      .style('text-shadow', '1px 1px 2px rgba(0,0,0,0.5)') // Sombra de texto para mejor legibilidad
       .attr('transform', (d): string => `translate(${arc.centroid(d)})`)
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
