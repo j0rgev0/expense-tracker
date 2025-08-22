@@ -201,41 +201,5 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
           })
           .remove()
     );
-
-    // Barras + tooltip
-    // svg
-    //   .selectAll('.bar')
-    //   .data(this.data)
-    //   .enter()
-    //   .append('path')
-    //   .attr('fill', (_, i) => (i % 2 === 0 ? '#3b82f6' : '#bfdbfe'))
-    //   .attr('d', d => {
-    //     const xVal = x(d.category) ?? 0;
-    //     const yVal = y(d.amount);
-    //     const barWidth = x.bandwidth();
-    //     const barHeight = innerHeight - yVal;
-
-    //     const r = Math.min(6, barWidth / 2, barHeight);
-
-    //     return `
-    //     M${xVal},${yVal + r}
-    //     a${r},${r} 0 0 1 ${r},-${r}
-    //     h${barWidth - 2 * r}
-    //     a${r},${r} 0 0 1 ${r},${r}
-    //     v${barHeight - r}
-    //     h-${barWidth}
-    //     Z
-    //   `;
-    //   })
-    //   .on('mouseover', (event, d) => {
-    //     tooltip.classed('hidden', false).html(`$${d.amount}`);
-    //   })
-    //   .on('mousemove', event => {
-    //     const [xPos, yPos] = d3.pointer(event);
-    //     tooltip.style('left', `${xPos + 15}px`).style('top', `${yPos - 20}px`);
-    //   })
-    //   .on('mouseout', () => {
-    //     tooltip.classed('hidden', true);
-    //   });
   }
 }
