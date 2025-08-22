@@ -89,8 +89,8 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
       svg
         .append('text')
         .attr('text-anchor', 'middle')
-        .attr('class', 'fill-gray-400 text-sm font-medium')
-        .text('Sin datos disponibles');
+        .attr('class', 'fill-gray-500 text-xs font-semibold')
+        .text('No data available');
       return;
     }
 
@@ -128,13 +128,13 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
           .style('transform', 'scale(1.03)');
 
         tooltip.classed('hidden', false).html(`
-            <div class="font-semibold text-white">${d.data.category}</div>
-            <div class="text-blue-200">$${d.data.amount.toLocaleString()}</div>
+            <div class="font-semibold text-white capitalize">${d.data.category}</div>
+            <div class="text-blue-200 text-center">$${d.data.amount.toLocaleString()}</div>
           `);
       })
       .on('mousemove', event => {
         const [xPos, yPos] = d3.pointer(event);
-        tooltip.style('left', `${xPos + 15}px`).style('top', `${yPos - 20}px`);
+        tooltip.style('left', `${xPos + 85}px`).style('top', `${yPos + 50}px`);
       })
       .on('mouseout', event => {
         d3.select(event.currentTarget).style('stroke', 'none').style('transform', 'scale(1)');
@@ -160,7 +160,7 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
       .attr('dominant-baseline', 'middle')
       .text((d): string => {
         const percentage = (d.data.amount / total) * 100;
-        if (percentage < 10) return ''; // no mostrar si es muy pequeño
+        if (percentage < 10) return '';
         return CATEGORY_ABBREVIATIONS[d.data.category] ?? d.data.category;
       });
 
@@ -170,7 +170,7 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
       .select('svg')
       .append('g')
       .attr('class', 'legend')
-      .attr('transform', `translate(${width - 120}, ${50})`);
+      .attr('transform', `translate(${width - 110}, ${50})`);
 
     const legendItems = legend
       .selectAll('.legend-item')
@@ -178,7 +178,7 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
       .enter()
       .append('g')
       .attr('class', 'legend-item')
-      .attr('transform', (_, i) => `translate(0, ${i * 16})`); // menos separación vertical
+      .attr('transform', (_, i) => `translate(0, ${i * 15})`); // menos separación vertical
 
     legendItems
       .append('rect')
@@ -191,8 +191,8 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
       .append('text')
       .attr('x', 16) // ajustado al nuevo tamaño del cuadrado
       .attr('y', 8) // centrado con el cuadrado
-      .attr('class', 'text-[10px] font-normal fill-gray-600') // fuente mucho más pequeña
+      .attr('class', 'text-[10px] font-normal fill-gray-600 capitalize')
       .style('font-family', 'Inter, system-ui, sans-serif')
-      .text(d => `${CATEGORY_ABBREVIATIONS[d.category] ?? d.category} (${d.amount})`);
+      .text(d => `${CATEGORY_ABBREVIATIONS[d.category] ?? d.category}`);
   }
 }
