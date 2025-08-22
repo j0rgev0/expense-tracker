@@ -120,7 +120,10 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
             `;
           })
           .on('mouseover', (event, d) => {
-            tooltip.classed('hidden', false).html(`$${d.amount}`);
+            tooltip.classed('hidden', false).html(`
+            <div class="font-semibold text-white capitalize">${d.category}</div>
+            <div class="text-blue-200 text-center">$${d.amount.toLocaleString()}</div>
+          `);
           })
           .on('mousemove', event => {
             const [xPos, yPos] = d3.pointer(event);
