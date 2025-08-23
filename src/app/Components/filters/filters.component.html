@@ -1,61 +1,93 @@
-<div class="flex flex-wrap gap-3 w-full justify-between items-center">
-  <div class="flex flex-wrap gap-3 items-center">
+<div class="bg-white border border-gray-200 rounded-lg p-5 space-y-5">
 
-    <select [(ngModel)]="selectedType" (ngModelChange)="emitByType($event)"
-      class="w-32 px-3 py-1.5 rounded-md border border-gray-300 text-sm">
-      <option value="all">All</option>
-      <option value="income">Income</option>
-      <option value="expense">Expense</option>
-    </select>
+  <!-- Header con título y botón de limpiar -->
+  <div class="flex items-center justify-between">
+    <h3 class="text-sm font-medium text-gray-600">Transaction Type</h3>
 
-    <select [(ngModel)]="categorySelected" (ngModelChange)="emitByCategory($event)"
-      class="w-32 px-3 py-1.5 rounded-md border border-gray-300 text-sm">
-      <option value="all">All</option>
-      <option *ngFor="let c of listCategories" class="capitalize" [value]="c">{{ c }}</option>
-    </select>
+    <!-- Botón discreto para limpiar filtros -->
+    <button *ngIf="getActiveFiltersCount() > 0" (click)="clearAllFilters()"
+      class="text-xs text-red-500 hover:text-red-700 px-2 py-1 rounded hover:bg-red-100 transition-colors">
+      Clear filters ({{ getActiveFiltersCount() }})
+    </button>
+  </div>
 
-    <input [(ngModel)]="selectedDate" (ngModelChange)="emitByDate($event)" type="date"
-      class="w-36 px-3 py-1.5 rounded-md border border-gray-300 text-sm" />
+  <!-- Filtros por tipo -->
+  <div class="space-y-3">
+    <div class="flex flex-wrap gap-2">
+      <button (click)="emitByType('all')"
+        [class]="selectedType === 'all' 
+          ? 'px-4 py-2 text-sm font-medium rounded-md bg-blue-50 text-blue-700 border border-blue-200' 
+          : 'px-4 py-2 text-sm font-medium rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300'">
+        All
+      </button>
 
-    <div class="flex flex-col text-center gap-1 min-w-[180px]">
-      <label class="text-sm text-gray-600">Amount</label>
-      <div class="flex items-center gap-2">
-        <span class="text-xs text-gray-500">{{ formatAmount(minAmount) }}</span>
-        <input [(ngModel)]="selectedAmount" (ngModelChange)="emitByAmount($event)" type="range" [min]="minAmount"
-          [max]="maxAmount" [step]="stepAmount"
-          class="w-full h-1 bg-gray-200 rounded-md appearance-none cursor-pointer" />
-        <span class="text-xs text-gray-500">{{ formatAmount(maxAmount) }}</span>
-      </div>
-      <div class="text-xs text-blue-600 text-center">{{ formatAmount(selectedAmount) }} or more</div>
-    </div>
+      <button (click)="emitByType('income')"
+        [class]="selectedType === 'income' 
+          ? 'px-4 py-2 text-sm font-medium rounded-md bg-green-50 text-green-700 border border-green-200' 
+          : 'px-4 py-2 text-sm font-medium rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300'">
+        Income
+      </button>
 
-    <div *ngIf="getActiveFiltersCount() > 0"
-      class="flex items-center gap-3 px-3 py-1.5 border border-blue-300 bg-blue-50 text-sm text-blue-700 rounded-md">
-
-      <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-      </svg>
-
-      <span class="font-medium">
-        {{ getActiveFiltersCount() }} {{ getActiveFiltersCount() > 1 ? 'filters active' : 'filter active' }}
-      </span>
-
-      <button (click)="clearAllFilters()"
-        class="ml-auto px-2 py-1 text-xs text-red-600 border border-red-300 bg-red-50 rounded hover:bg-red-100 transition">
-        Clear all
+      <button (click)="emitByType('expense')"
+        [class]="selectedType === 'expense' 
+          ? 'px-4 py-2 text-sm font-medium rounded-md bg-red-50 text-red-700 border border-red-200' 
+          : 'px-4 py-2 text-sm font-medium rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300'">
+        Expense
       </button>
     </div>
-
   </div>
 
-  <div class="relative w-64">
-    <svg class="w-4 h-4 absolute top-1/2 left-2 transform -translate-y-1/2 text-gray-400"
-      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-      <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
-        d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-    </svg>
-    <input [(ngModel)]="search" (ngModelChange)="emitBySearch($event)" type="text" placeholder="Search transactions"
-      class="w-full pl-8 pr-2 py-1.5 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400" />
+  <!-- Filtros principales -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+    <!-- Filtro por categoría -->
+    <div class="space-y-2">
+      <label class="block text-sm font-medium text-gray-600">Category</label>
+      <select [(ngModel)]="categorySelected" (ngModelChange)="emitByCategory($event)"
+        class="w-full px-3 py-2 rounded-md border border-gray-300 text-sm focus:border-blue-400 focus:outline-none">
+        <option value="all">All Categories</option>
+        <option *ngFor="let c of filteredCategories" class="capitalize" [value]="c">{{ c }}</option>
+      </select>
+    </div>
+
+    <!-- Filtro por fecha -->
+    <div class="space-y-2">
+      <label class="block text-sm font-medium text-gray-600">Date</label>
+      <input [(ngModel)]="selectedDate" (ngModelChange)="emitByDate($event)" type="date"
+        class="w-full px-3 py-2 rounded-md border border-gray-300 text-sm focus:border-blue-400 focus:outline-none" />
+    </div>
+
+    <!-- Filtro por monto -->
+    <div class="space-y-2">
+      <label class="block text-sm font-medium text-gray-600">
+        Amount Range
+        <span class="text-xs text-gray-500 font-normal">
+          ({{ currentTransactionType }})
+        </span>
+      </label>
+      <div class="space-y-2">
+        <div class="flex items-center justify-between text-xs text-gray-500">
+          <span>{{ formatAmount(minAmount) }}</span>
+          <span>{{ formatAmount(maxAmount) }}</span>
+        </div>
+        <input [(ngModel)]="selectedAmount" (ngModelChange)="emitByAmount($event)" type="range" [min]="minAmount"
+          [max]="maxAmount" [step]="stepAmount"
+          class="w-full h-1.5 bg-gray-200 rounded-full appearance-none cursor-pointer" />
+        <div class="text-center">
+          <span class="text-xs text-blue-600">
+            {{ formatAmount(selectedAmount) }} or more
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Búsqueda -->
+    <div class="space-y-2">
+      <label class="block text-sm font-medium text-gray-600">Search</label>
+      <input [(ngModel)]="search" (ngModelChange)="emitBySearch($event)" type="text"
+        placeholder="Search transactions..."
+        class="w-full px-3 py-2 rounded-md border border-gray-300 text-sm focus:border-blue-400 focus:outline-none placeholder-gray-400" />
+    </div>
   </div>
+
 </div>
