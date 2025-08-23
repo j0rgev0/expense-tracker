@@ -73,13 +73,13 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
       .attr('width', width)
       .attr('height', height)
       .append('g')
-      .attr('transform', `translate(${width / 2 - 55},${height / 2})`); // corrido un poco a la izquierda para dejar sitio a la leyenda
+      .attr('transform', `translate(${width / 2 - 55},${height / 2})`);
 
-    // Título
+    const titleX = width / 2 - 55 + (width - 110 - (width / 2 - 55)) / 2;
     d3.select(element)
       .select('svg')
       .append('text')
-      .attr('x', width / 2 - 80)
+      .attr('x', titleX)
       .attr('y', 20)
       .attr('text-anchor', 'middle')
       .attr('class', 'text-sm font-semibold fill-gray-700')
@@ -164,7 +164,7 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
         return CATEGORY_ABBREVIATIONS[d.data.category] ?? d.data.category;
       });
 
-    // Leyenda
+    // Leyenda en dos columnas
     const legend = d3
       .select(element)
       .select('svg')
@@ -172,13 +172,18 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
       .attr('class', 'legend')
       .attr('transform', `translate(${width - 110}, ${50})`);
 
+    const itemsPerColumn = Math.ceil(this.data.length / 2);
     const legendItems = legend
       .selectAll('.legend-item')
       .data(this.data)
       .enter()
       .append('g')
       .attr('class', 'legend-item')
-      .attr('transform', (_, i) => `translate(0, ${i * 15})`); // menos separación vertical
+      .attr('transform', (_, i) => {
+        const column = Math.floor(i / itemsPerColumn);
+        const row = i % itemsPerColumn;
+        return `translate(${column * 50}, ${row * 15})`;
+      });
 
     legendItems
       .append('rect')
