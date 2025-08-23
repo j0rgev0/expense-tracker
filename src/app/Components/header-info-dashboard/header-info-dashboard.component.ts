@@ -32,13 +32,11 @@ export class HeaderInfoDashboardComponent implements OnInit, OnChanges {
   }
 
   private updateChartData(): void {
-    // Usar las transacciones filtradas si están disponibles, sino usar todas las transacciones
     const transactionsToUse =
       this.filteredTransactions.length > 0 ? this.filteredTransactions : this.transactions;
 
     const categoryTotals = new Map<string, number>();
 
-    // Solo incluir transacciones de tipo 'expense' (gastos)
     transactionsToUse
       .filter(transaction => transaction.type === 'expense')
       .forEach(transaction => {
@@ -46,7 +44,6 @@ export class HeaderInfoDashboardComponent implements OnInit, OnChanges {
         categoryTotals.set(transaction.category, currentTotal + transaction.amount);
       });
 
-    // Convertir a formato requerido por el gráfico
     this.chartData = Array.from(categoryTotals.entries()).map(([category, amount]) => ({
       category,
       amount

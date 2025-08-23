@@ -96,7 +96,6 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
 
     const total = d3.sum(this.data, d => d.amount);
 
-    // Generador del pie
     const pie = d3
       .pie<{ category: string; amount: number }>()
       .value(d => d.amount)
@@ -107,13 +106,11 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
       .innerRadius(0)
       .outerRadius(radius - 34);
 
-    // Colores
     const color = d3
       .scaleOrdinal()
       .domain(this.data.map((_, i) => String(i)))
       .range(this.colorPalette);
 
-    // Slices con animación
     const arcs = svg
       .selectAll<SVGPathElement, d3.PieArcDatum<{ category: string; amount: number }>>('path')
       .data(pie(this.data))
@@ -185,15 +182,15 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
 
     legendItems
       .append('rect')
-      .attr('width', 10) // más pequeño
-      .attr('height', 10) // más pequeño
-      .attr('rx', 2) // esquinas más sutiles
+      .attr('width', 10)
+      .attr('height', 10)
+      .attr('rx', 2)
       .attr('fill', (_, i) => color(String(i)) as string);
 
     legendItems
       .append('text')
-      .attr('x', 16) // ajustado al nuevo tamaño del cuadrado
-      .attr('y', 8) // centrado con el cuadrado
+      .attr('x', 16)
+      .attr('y', 8)
       .attr('class', 'text-[10px] font-normal fill-gray-600 capitalize')
       .style('font-family', 'Inter, system-ui, sans-serif')
       .text(d => `${CATEGORY_ABBREVIATIONS[d.category] ?? d.category}`);
