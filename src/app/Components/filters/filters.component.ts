@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TransactionService } from '../../Services/transactions.service';
 
-import { CATEGORIES } from '../../utils/consts';
+import { CATEGORIES, INCOMECAT, EXPENSECAT } from '../../utils/consts';
 import { AllCategories } from '../../Interface/Transaction';
 
 // Interface para el estado de los filtros
@@ -56,10 +56,27 @@ export class FiltersComponent implements OnInit {
       return;
     }
 
-    const amounts = transactions.map(t => t.amount);
+    // Filtrar transacciones según el tipo seleccionado
+    let filteredTransactions = transactions;
+    if (this.selectedType === 'income') {
+      filteredTransactions = transactions.filter(t => t.type === 'income');
+    } else if (this.selectedType === 'expense') {
+      filteredTransactions = transactions.filter(t => t.type === 'expense');
+    }
+
+    // Si no hay transacciones del tipo seleccionado, usar valores por defecto
+    if (filteredTransactions.length === 0) {
+      this.minAmount = 0;
+      this.maxAmount = 1000;
+      this.stepAmount = 10;
+      return;
+    }
+
+    const amounts = filteredTransactions.map(t => t.amount);
     this.minAmount = Math.floor(Math.min(...amounts) / 10) * 10;
     this.maxAmount = Math.floor(Math.max(...amounts) / 10) * 10;
 
+    // Asegurar un rango mínimo para mejor usabilidad
     if (this.maxAmount - this.minAmount < 100) {
       this.maxAmount = this.minAmount + 100;
     }
@@ -75,6 +92,7 @@ export class FiltersComponent implements OnInit {
       this.stepAmount = 50;
     }
 
+    // Ajustar el monto seleccionado si está fuera del nuevo rango
     if (this.selectedAmount < this.minAmount || this.selectedAmount > this.maxAmount) {
       this.selectedAmount = this.minAmount;
     }
@@ -91,8 +109,33 @@ export class FiltersComponent implements OnInit {
     this.filtersChange.emit(filterState);
   }
 
+  // Getter para obtener el tipo de transacción actual en formato legible
+  get currentTransactionType(): string {
+    switch (this.selectedType) {
+      case 'income':
+        return 'Income';
+      case 'expense':
+        return 'Expense';
+      default:
+        return 'All';
+    }
+  }
+
+  get filteredCategories(): AllCategories[] {
+    if (this.selectedType === 'income') {
+      return [...INCOMECAT] as AllCategories[];
+    } else if (this.selectedType === 'expense') {
+      return [...EXPENSECAT] as AllCategories[];
+    } else {
+      return [...CATEGORIES] as AllCategories[];
+    }
+  }
+
   emitByType(typeSelected: 'income' | 'expense' | 'all') {
     this.selectedType = typeSelected;
+    this.categorySelected = 'all';
+    // Recalcular el rango de montos para el nuevo tipo
+    this.calculateAmountRange();
     this.emitFilters();
   }
 
