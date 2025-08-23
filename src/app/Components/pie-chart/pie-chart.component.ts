@@ -134,7 +134,7 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
       })
       .on('mousemove', event => {
         const [xPos, yPos] = d3.pointer(event);
-        tooltip.style('left', `${xPos + 85}px`).style('top', `${yPos + 50}px`);
+        tooltip.style('left', `${xPos + 85}px`).style('top', `${yPos + 70}px`);
       })
       .on('mouseout', event => {
         d3.select(event.currentTarget).style('stroke', 'none').style('transform', 'scale(1)');
@@ -147,7 +147,6 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
         return t => arc(i(t))!;
       });
 
-    // Etiquetas dentro de los slices solo si >10%
     svg
       .selectAll<SVGTextElement, d3.PieArcDatum<{ category: string; amount: number }>>('text.slice')
       .data(pie(this.data))
@@ -164,7 +163,6 @@ export class PieChartComponent implements AfterViewInit, OnChanges {
         return CATEGORY_ABBREVIATIONS[d.data.category] ?? d.data.category;
       });
 
-    // Leyenda en dos columnas
     const legend = d3
       .select(element)
       .select('svg')
