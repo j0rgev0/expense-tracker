@@ -48,7 +48,6 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
 
     const svgElement = d3.select(element).append('svg').attr('width', width).attr('height', height);
 
-    // Título
     svgElement
       .append('text')
       .attr('x', width / 2)

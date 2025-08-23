@@ -7,7 +7,6 @@ import { TransactionService } from '../../Services/transactions.service';
 import { CATEGORIES, INCOMECAT, EXPENSECAT } from '../../utils/consts';
 import { AllCategories } from '../../Interface/Transaction';
 
-// Interface para el estado de los filtros
 export interface FilterState {
   type: 'income' | 'expense' | 'all';
   category: AllCategories;
@@ -56,7 +55,6 @@ export class FiltersComponent implements OnInit {
       return;
     }
 
-    // Filtrar transacciones según el tipo seleccionado
     let filteredTransactions = transactions;
     if (this.selectedType === 'income') {
       filteredTransactions = transactions.filter(t => t.type === 'income');
@@ -64,7 +62,6 @@ export class FiltersComponent implements OnInit {
       filteredTransactions = transactions.filter(t => t.type === 'expense');
     }
 
-    // Si no hay transacciones del tipo seleccionado, usar valores por defecto
     if (filteredTransactions.length === 0) {
       this.minAmount = 0;
       this.maxAmount = 1000;
@@ -76,7 +73,6 @@ export class FiltersComponent implements OnInit {
     this.minAmount = Math.floor(Math.min(...amounts) / 10) * 10;
     this.maxAmount = Math.floor(Math.max(...amounts) / 10) * 10;
 
-    // Asegurar un rango mínimo para mejor usabilidad
     if (this.maxAmount - this.minAmount < 100) {
       this.maxAmount = this.minAmount + 100;
     }
@@ -92,7 +88,6 @@ export class FiltersComponent implements OnInit {
       this.stepAmount = 50;
     }
 
-    // Ajustar el monto seleccionado si está fuera del nuevo rango
     if (this.selectedAmount < this.minAmount || this.selectedAmount > this.maxAmount) {
       this.selectedAmount = this.minAmount;
     }
@@ -109,7 +104,6 @@ export class FiltersComponent implements OnInit {
     this.filtersChange.emit(filterState);
   }
 
-  // Getter para obtener el tipo de transacción actual en formato legible
   get currentTransactionType(): string {
     switch (this.selectedType) {
       case 'income':
@@ -134,7 +128,7 @@ export class FiltersComponent implements OnInit {
   emitByType(typeSelected: 'income' | 'expense' | 'all') {
     this.selectedType = typeSelected;
     this.categorySelected = 'all';
-    // Recalcular el rango de montos para el nuevo tipo
+
     this.calculateAmountRange();
     this.emitFilters();
   }
