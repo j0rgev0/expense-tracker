@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HeaderInfoDashboardComponent } from '../../Components/header-info-dashboard/header-info-dashboard.component';
 import { AccordionTransactionComponent } from '../../Components/accordion-transaction/accordion-transaction.component';
 import { TransactionService } from '../../Services/transactions.service';
@@ -114,8 +114,10 @@ export class DashboardComponent {
   }
 
   isModalOpen = false;
+  currentModalView: 'add' | 'view' = 'add';
 
-  openModal() {
+  openModal(view: 'add' | 'view' = 'add') {
+    this.currentModalView = view;
     this.isModalOpen = true;
   }
 
