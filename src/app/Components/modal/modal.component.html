@@ -12,7 +12,9 @@
             </ng-container>
         </div>
 
-        <app-add-transaction-button (action)="modalMode = 'add'" *ngIf="modalMode === 'view'" />
+        <div class="flex justify-center mt-4">
+            <app-add-transaction-button (action)="modalMode = 'add'" *ngIf="modalMode === 'view'" />
+        </div>
 
         <div *ngIf="modalMode === 'view'" class="flex justify-center space-x-2 pt-4">
             <button type="button" (click)="onClose()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">

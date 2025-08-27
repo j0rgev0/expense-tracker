@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-add-transaction-button',
@@ -9,6 +9,8 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class AddTransactionButtonComponent {
   @Output() action = new EventEmitter<void>();
+  @Input() text = 'Add Transaction';
+  @Input() svg = 'add';
 
   onAction() {
     this.action.emit();

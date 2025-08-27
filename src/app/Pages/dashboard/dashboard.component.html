@@ -2,7 +2,8 @@
   <div>
     <app-header-info-dashboard [filteredTransactions]="transactionsListFiltered" />
   </div>
-  <div class="mt-6">
+  <div class="flex mt-6 justify-center">
+    <app-add-transaction-button class="pr-4" (action)="openModal()" text="Manage Transactions" [svg]="'manage'" />
     <app-add-transaction-button (action)="openModal()" />
   </div>
   <div class="mt-6">

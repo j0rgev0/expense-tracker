@@ -3,16 +3,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { HeaderInfoDashboardComponent } from '../../Components/header-info-dashboard/header-info-dashboard.component';
 import { AccordionTransactionComponent } from '../../Components/accordion-transaction/accordion-transaction.component';
 import { TransactionService } from '../../Services/transactions.service';
-import {
-  AllCategories,
-  ExpenseCategory,
-  IncomesCategory,
-  Transaction
-} from '../../Interface/Transaction';
+import { AllCategories, Transaction } from '../../Interface/Transaction';
 import { AddTransactionButtonComponent } from '../../Components/add-transaction-button/add-transaction-button.component';
 import { FiltersComponent, FilterState } from '../../Components/filters/filters.component';
 import { ModalComponent } from '../../Components/modal/modal.component';
-import { BarChartComponent } from '../../Components/bar-chart/bar-chart.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,10 +23,8 @@ import { BarChartComponent } from '../../Components/bar-chart/bar-chart.componen
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
-
   transactionsListFiltered: Transaction[] = [];
   transactionsList: Transaction[] = [];
-
 
   modalOpen: boolean = false;
 
@@ -51,22 +43,18 @@ export class DashboardComponent {
     });
   }
 
-
   applyFilters() {
     let filteredTransactions = [...this.transactionsList];
-
 
     if (this.currentFilters.type !== 'all') {
       filteredTransactions = filteredTransactions.filter(t => t.type === this.currentFilters.type);
     }
-
 
     if (this.currentFilters.category !== 'all') {
       filteredTransactions = filteredTransactions.filter(
         t => t.category === this.currentFilters.category
       );
     }
-
 
     if (this.currentFilters.date !== '') {
       const selectedDate = new Date(this.currentFilters.date);
@@ -76,13 +64,11 @@ export class DashboardComponent {
       });
     }
 
-
     if (this.currentFilters.amount > 0) {
       filteredTransactions = filteredTransactions.filter(
         t => t.amount >= this.currentFilters.amount
       );
     }
-
 
     if (this.currentFilters.search !== '') {
       const searchTerm = this.currentFilters.search.toLowerCase().trim();
@@ -96,7 +82,6 @@ export class DashboardComponent {
 
     this.transactionsListFiltered = filteredTransactions;
   }
-
 
   onFiltersChange(filters: FilterState) {
     this.currentFilters = filters;
