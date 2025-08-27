@@ -3,6 +3,9 @@
     <app-header-info-dashboard [filteredTransactions]="transactionsListFiltered" />
   </div>
   <div class="mt-6">
+    <app-add-transaction-button (action)="openModal()" />
+  </div>
+  <div class="mt-6">
     <app-filters (filtersChange)="onFiltersChange($event)"></app-filters>
   </div>
   <div class="flex flex-col justify-center overflow-y-auto">
@@ -10,7 +13,6 @@
       [transaction]="transaction"></app-accordion-transaction>
   </div>
   <div class="my-6">
-    <app-add-transaction-button (action)="openModal()" />
     <app-modal [show]="isModalOpen" [defaultView]="'add'" (close)="closeModal()" (next)="closeModal()" />
   </div>
 </div>
