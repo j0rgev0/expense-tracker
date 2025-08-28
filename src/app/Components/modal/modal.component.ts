@@ -14,7 +14,7 @@ import { AddTransactionButtonComponent } from '../add-transaction-button/add-tra
 import { TransactionService } from '../../Services/transactions.service';
 import { ViewTransactionsComponent } from '../view-transactions/view-transactions.component';
 import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
-import { Router } from '@angular/router';
+import { ModalService } from '../../Services/modal.service';
 
 @Component({
   selector: 'app-modal',
@@ -28,7 +28,7 @@ import { Router } from '@angular/router';
   templateUrl: './modal.component.html'
 })
 export class ModalComponent implements OnInit, OnChanges {
-  @Input() show = false;
+  @Input() show!: boolean | null;
   @Input() defaultView!: 'view' | 'add';
   @Output() close = new EventEmitter<void>();
   @Output() next = new EventEmitter<void>();
@@ -37,7 +37,7 @@ export class ModalComponent implements OnInit, OnChanges {
 
   constructor(
     private transactionService: TransactionService,
-    private router: Router
+    private modalService: ModalService
   ) {}
 
   transactionList: Transaction[] = [];
@@ -63,11 +63,11 @@ export class ModalComponent implements OnInit, OnChanges {
   }
 
   onClose() {
-    this.close.emit();
+    this.modalService.close();
   }
 
   @HostListener('document:keydown.escape', ['$event'])
   onEscapePress() {
-    this.close.emit();
+    this.modalService.close();
   }
 }

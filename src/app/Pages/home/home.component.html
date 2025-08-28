@@ -31,4 +31,4 @@
   </div>
 </section>
 
-<app-modal [show]="isModalOpen" [defaultView]="'view'" (close)="closeModal()" (next)="onNext()" />
+<app-modal [show]="modalService.isOpen$ | async" [defaultView]="'view'" (close)="closeModal()" (next)="onNext()" />

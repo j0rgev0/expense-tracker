@@ -14,6 +14,7 @@
       [transaction]="transaction"></app-accordion-transaction>
   </div>
   <div class="my-6">
-    <app-modal [show]="isModalOpen" [defaultView]="currentModalView" (close)="closeModal()" (next)="closeModal()" />
+    <app-modal [show]="modalService.isOpen$ | async" [defaultView]="currentModalView" (close)="closeModal()"
+      (next)="closeModal()" />
   </div>
 </div>
