@@ -89,7 +89,7 @@ export class FiltersComponent implements OnInit {
     }
 
     if (this.selectedAmount < this.minAmount || this.selectedAmount > this.maxAmount) {
-      this.selectedAmount = this.minAmount;
+      this.selectedAmount = 0;
     }
   }
 

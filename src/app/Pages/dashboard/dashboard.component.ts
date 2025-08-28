@@ -14,7 +14,6 @@ import { ModalService } from '../../Services/modal.service';
   standalone: true,
   imports: [
     CommonModule,
-    // BarChartComponent,
     HeaderInfoDashboardComponent,
     AccordionTransactionComponent,
     FiltersComponent,
