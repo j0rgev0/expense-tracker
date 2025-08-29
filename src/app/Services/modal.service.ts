@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ModalService {
   private _isOpen$ = new BehaviorSubject<boolean>(false);
-  isOpen$ = this._isOpen$.asObservable();
+
+  get isOpen$(): Observable<boolean> {
+    return this._isOpen$.asObservable().pipe(map(value => value || false));
+  }
 
   open() {
     this._isOpen$.next(true);

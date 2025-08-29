@@ -7,13 +7,13 @@ import { AllCategories, Transaction } from '../../Interface/Transaction';
 import { AddTransactionButtonComponent } from '../../Components/add-transaction-button/add-transaction-button.component';
 import { FiltersComponent, FilterState } from '../../Components/filters/filters.component';
 import { ModalComponent } from '../../Components/modal/modal.component';
+import { ModalService } from '../../Services/modal.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     CommonModule,
-    // BarChartComponent,
     HeaderInfoDashboardComponent,
     AccordionTransactionComponent,
     FiltersComponent,
@@ -26,8 +26,6 @@ export class DashboardComponent {
   transactionsListFiltered: Transaction[] = [];
   transactionsList: Transaction[] = [];
 
-  modalOpen: boolean = false;
-
   currentFilters: FilterState = {
     type: 'all',
     category: 'all',
@@ -36,7 +34,10 @@ export class DashboardComponent {
     search: ''
   };
 
-  constructor(private transactionService: TransactionService) {
+  constructor(
+    private transactionService: TransactionService,
+    public modalService: ModalService
+  ) {
     this.transactionService.transactions$.subscribe(transactions => {
       this.transactionsList = transactions;
       this.applyFilters();
@@ -113,15 +114,14 @@ export class DashboardComponent {
     this.applyFilters();
   }
 
-  isModalOpen = false;
   currentModalView: 'add' | 'view' = 'add';
 
   openModal(view: 'add' | 'view' = 'add') {
     this.currentModalView = view;
-    this.isModalOpen = true;
+    this.modalService.open();
   }
 
   closeModal() {
-    this.isModalOpen = false;
+    this.modalService.close();
   }
 }

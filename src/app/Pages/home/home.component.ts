@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { ModalComponent } from '../../Components/modal/modal.component';
 import { CommonModule } from '@angular/common';
+import { ModalService } from '../../Services/modal.service';
 
 @Component({
   selector: 'app-home',
@@ -10,16 +11,17 @@ import { CommonModule } from '@angular/common';
   templateUrl: './home.component.html'
 })
 export class HomeComponent {
-  constructor(private router: Router) {}
-
-  isModalOpen = false;
+  constructor(
+    private router: Router,
+    public modalService: ModalService
+  ) {}
 
   openModal() {
-    this.isModalOpen = true;
+    this.modalService.open();
   }
 
   closeModal() {
-    this.isModalOpen = false;
+    this.modalService.close();
   }
 
   onNext() {
