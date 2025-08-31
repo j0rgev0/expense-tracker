@@ -3,7 +3,9 @@ import { BehaviorSubject } from 'rxjs';
 import { Transaction } from '../Interface/Transaction';
 import { UUID } from 'crypto';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class TransactionService {
   private transactionsSubject = new BehaviorSubject<Transaction[]>(this.loadTransactions());
   public transactions$ = this.transactionsSubject.asObservable();
