@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HeaderInfoDashboardComponent } from '../../Components/header-info-dashboard/header-info-dashboard.component';
 import { AccordionTransactionComponent } from '../../Components/accordion-transaction/accordion-transaction.component';
 import { TransactionService } from '../../Services/transactions.service';
@@ -24,7 +24,7 @@ import { Router } from '@angular/router';
   ],
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
   transactionsListFiltered: Transaction[] = [];
   transactionsList: Transaction[] = [];
   isLoggedIn = false;
@@ -47,14 +47,10 @@ export class DashboardComponent implements OnInit {
       this.transactionsList = transactions;
       this.applyFilters();
     });
-  }
 
-  ngOnInit(): void {
-    if (this.authService.isLoggedIn()) {
-      this.isLoggedIn = true;
-    } else {
-      this.isLoggedIn = false;
-    }
+    this.authService.user$.subscribe(user => {
+      this.isLoggedIn = user !== null;
+    });
   }
 
   applyFilters() {

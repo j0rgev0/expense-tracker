@@ -5,7 +5,10 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
-  User
+  User,
+  UserCredential,
+  setPersistence,
+  browserLocalPersistence
 } from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
 
@@ -17,20 +20,30 @@ export class AuthService {
   user$ = this.currentUser.asObservable();
 
   constructor(private auth: Auth) {
-    onAuthStateChanged(this.auth, user => {
-      this.currentUser.next(user);
-    });
+    setPersistence(this.auth, browserLocalPersistence)
+      .then(() => {
+        console.log('Firebase Auth persistence set to local.');
+        onAuthStateChanged(this.auth, user => {
+          this.currentUser.next(user);
+        });
+      })
+      .catch(error => {
+        console.error('Error al configurar la persistencia de Firebase Auth:', error);
+        onAuthStateChanged(this.auth, user => {
+          this.currentUser.next(user);
+        });
+      });
   }
 
-  register(email: string, password: string) {
+  async register(email: string, password: string): Promise<UserCredential> {
     return createUserWithEmailAndPassword(this.auth, email, password);
   }
 
-  login(email: string, password: string) {
+  async login(email: string, password: string): Promise<UserCredential> {
     return signInWithEmailAndPassword(this.auth, email, password);
   }
 
-  logout() {
+  logout(): Promise<void> {
     return signOut(this.auth);
   }
 
