@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderInfoDashboardComponent } from '../../Components/header-info-dashboard/header-info-dashboard.component';
 import { AccordionTransactionComponent } from '../../Components/accordion-transaction/accordion-transaction.component';
 import { TransactionService } from '../../Services/transactions.service';
@@ -8,6 +8,8 @@ import { AddTransactionButtonComponent } from '../../Components/add-transaction-
 import { FiltersComponent, FilterState } from '../../Components/filters/filters.component';
 import { ModalComponent } from '../../Components/modal/modal.component';
 import { ModalService } from '../../Services/modal.service';
+import { Auth } from '@angular/fire/auth';
+import { AuthService } from '../../Services/Auth/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,9 +24,10 @@ import { ModalService } from '../../Services/modal.service';
   ],
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   transactionsListFiltered: Transaction[] = [];
   transactionsList: Transaction[] = [];
+  isLoggedIn = false;
 
   currentFilters: FilterState = {
     type: 'all',
@@ -36,12 +39,21 @@ export class DashboardComponent {
 
   constructor(
     private transactionService: TransactionService,
+    private authService: AuthService,
     public modalService: ModalService
   ) {
     this.transactionService.transactions$.subscribe(transactions => {
       this.transactionsList = transactions;
       this.applyFilters();
     });
+  }
+
+  ngOnInit(): void {
+    if (this.authService.isLoggedIn()) {
+      this.isLoggedIn = true;
+    } else {
+      this.isLoggedIn = false;
+    }
   }
 
   applyFilters() {
@@ -119,6 +131,14 @@ export class DashboardComponent {
   openModal(view: 'add' | 'view' = 'add') {
     this.currentModalView = view;
     this.modalService.open();
+  }
+
+  login() {
+    console.log('login');
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
   closeModal() {
