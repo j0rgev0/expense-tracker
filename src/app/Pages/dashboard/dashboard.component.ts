@@ -8,8 +8,8 @@ import { AddTransactionButtonComponent } from '../../Components/add-transaction-
 import { FiltersComponent, FilterState } from '../../Components/filters/filters.component';
 import { ModalComponent } from '../../Components/modal/modal.component';
 import { ModalService } from '../../Services/modal.service';
-import { Auth } from '@angular/fire/auth';
 import { AuthService } from '../../Services/Auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -40,6 +40,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private transactionService: TransactionService,
     private authService: AuthService,
+    private router: Router,
     public modalService: ModalService
   ) {
     this.transactionService.transactions$.subscribe(transactions => {
@@ -134,7 +135,7 @@ export class DashboardComponent implements OnInit {
   }
 
   login() {
-    console.log('login');
+    this.router.navigate(['/login']);
   }
 
   logout() {
