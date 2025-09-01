@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, Location } from '@angular/common';
+import { AuthService } from '../../Services/Auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,8 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private location: Location
+    private location: Location,
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -21,13 +23,21 @@ export class LoginComponent {
     });
   }
 
-  onLogin() {
+  async onLogin() {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
-    console.log('Login attempt:', this.loginForm.value);
-    // Conectar con AuthService aquí
+
+    const emailValue = this.email?.value ?? '';
+    const passwordValue = this.password?.value ?? '';
+
+    try {
+      const userCredential = await this.authService.login(emailValue, passwordValue);
+      console.log('Login exitoso:', userCredential.user);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   onCancel() {
