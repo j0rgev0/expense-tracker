@@ -28,6 +28,7 @@ export class DashboardComponent {
   transactionsListFiltered: Transaction[] = [];
   transactionsList: Transaction[] = [];
   isLoggedIn = false;
+  loading = true;
 
   currentFilters: FilterState = {
     type: 'all',
@@ -49,6 +50,7 @@ export class DashboardComponent {
     });
 
     this.authService.user$.subscribe(user => {
+      this.loading = false; 
       this.isLoggedIn = user !== null;
     });
   }
@@ -131,11 +133,21 @@ export class DashboardComponent {
   }
 
   login() {
-    this.router.navigate(['/login']);
+    this.loading = true;
+    try {
+      this.router.navigate(['/login']);
+    } finally {
+      this.loading = false;
+    }
   }
 
   logout() {
-    this.authService.logout();
+    this.loading = true;
+    try {
+      this.authService.logout();
+    } finally {
+      this.loading = false;
+    }
   }
 
   closeModal() {

@@ -1,19 +1,16 @@
 <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <div class="bg-white shadow-lg rounded-2xl w-full max-w-md p-8">
-        <!-- Title -->
+
         <h2 class="text-2xl font-bold text-center text-blue-600">Expense Tracker</h2>
         <p class="text-sm text-gray-500 text-center mt-1 mb-6">
             Log in to manage your expenses
         </p>
 
-        <!-- Error Message -->
         <div *ngIf="errorMessage" class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
             {{ errorMessage }}
         </div>
 
-        <!-- Form -->
         <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="space-y-5">
-            <!-- Email -->
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">
                     Email
@@ -27,7 +24,6 @@
                 </small>
             </div>
 
-            <!-- Password -->
             <div>
                 <label for="password" class="block text-sm font-medium text-gray-700">
                     Password
@@ -41,7 +37,6 @@
                 </small>
             </div>
 
-            <!-- Buttons -->
             <div class="flex justify-between gap-4">
                 <button type="submit" [disabled]="loginForm.invalid || isLoading"
                     class="flex-1 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center">
@@ -55,7 +50,6 @@
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                             </path>
                         </svg>
-                        Iniciando sesión...
                     </span>
                 </button>
                 <button type="button" (click)="onCancel()" [disabled]="isLoading"
@@ -65,7 +59,6 @@
             </div>
         </form>
 
-        <!-- Extra links -->
         <div class="flex justify-between text-sm text-blue-600 mt-4">
             <a routerLink="/register" class="hover:underline">Create account</a>
             <a routerLink="/forgot-password" class="hover:underline">Forgot password?</a>

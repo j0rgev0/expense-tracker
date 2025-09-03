@@ -22,7 +22,6 @@ export class AuthService {
   constructor(private auth: Auth) {
     setPersistence(this.auth, browserLocalPersistence)
       .then(() => {
-        console.log('Firebase Auth persistence set to local.');
         onAuthStateChanged(this.auth, user => {
           this.currentUser.next(user);
         });
