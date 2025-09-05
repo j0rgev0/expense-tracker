@@ -10,6 +10,7 @@ import { ModalComponent } from '../../Components/modal/modal.component';
 import { ModalService } from '../../Services/modal.service';
 import { AuthService } from '../../Services/Auth/auth.service';
 import { Router } from '@angular/router';
+import { AuthButtonComponent } from '../../Components/Auth/auth-button/auth-button.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,14 +21,14 @@ import { Router } from '@angular/router';
     AccordionTransactionComponent,
     FiltersComponent,
     ModalComponent,
-    AddTransactionButtonComponent
+    AddTransactionButtonComponent,
+    AuthButtonComponent
   ],
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
   transactionsListFiltered: Transaction[] = [];
   transactionsList: Transaction[] = [];
-  loading = true;
   isLoggedIn = false;
 
   currentFilters: FilterState = {
@@ -50,12 +51,7 @@ export class DashboardComponent {
     });
 
     this.authService.user$.subscribe(user => {
-      if (user === undefined) {
-        this.loading = true;
-      } else {
-        this.loading = false;
-        this.isLoggedIn = user !== null;
-      }
+      this.isLoggedIn = user !== null;
     });
   }
 
@@ -136,21 +132,14 @@ export class DashboardComponent {
     this.modalService.open();
   }
 
-  login() {
-    this.loading = true;
+  auth() {
+    if (this.isLoggedIn) {
+      this.authService.logout();
+    }
     try {
       this.router.navigate(['/login']);
-    } finally {
-      this.loading = false;
-    }
-  }
-
-  logout() {
-    this.loading = true;
-    try {
-      this.authService.logout();
-    } finally {
-      this.loading = false;
+    } catch (e) {
+      console.log('Error: ' + e);
     }
   }
 

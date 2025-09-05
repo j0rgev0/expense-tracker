@@ -55,19 +55,45 @@ export class LoginComponent {
   private getErrorMessage(errorCode: string): string {
     switch (errorCode) {
       case 'auth/user-not-found':
-        return 'No existe una cuenta con este email.';
+        return 'No account found with this email.';
       case 'auth/wrong-password':
-        return 'Contraseña incorrecta.';
+        return 'Incorrect password.';
+      case 'auth/invalid-credential':
+        return 'Invalid email or password.';
       case 'auth/invalid-email':
-        return 'El formato del email no es válido.';
+        return 'The email format is invalid.';
       case 'auth/user-disabled':
-        return 'Esta cuenta ha sido deshabilitada.';
+        return 'This account has been disabled.';
+      case 'auth/email-already-in-use':
+        return 'This email is already associated with another account.';
+      case 'auth/weak-password':
+        return 'The password is too weak. Please choose a stronger one.';
+      case 'auth/missing-password':
+        return 'Please enter a password.';
+      case 'auth/operation-not-allowed':
+        return 'This sign-in method is not allowed. Please contact support.';
       case 'auth/too-many-requests':
-        return 'Demasiados intentos fallidos. Intenta más tarde.';
+        return 'Too many failed attempts. Please try again later.';
       case 'auth/network-request-failed':
-        return 'Error de conexión. Verifica tu internet.';
+        return 'Connection error. Check your internet connection.';
+      case 'auth/requires-recent-login':
+        return 'Please log in again to perform this action.';
+      case 'auth/credential-already-in-use':
+        return 'This credential is already linked to another account.';
+      case 'auth/account-exists-with-different-credential':
+        return 'An account already exists with a different sign-in method.';
+      case 'auth/popup-closed-by-user':
+        return 'The sign-in popup was closed before completing the process.';
+      case 'auth/cancelled-popup-request':
+        return 'Multiple popups opened. Please try again.';
+      case 'auth/unauthorized-domain':
+        return 'This domain is not authorized for OAuth operations.';
+      case 'auth/invalid-verification-code':
+        return 'The verification code is invalid or expired.';
+      case 'auth/invalid-verification-id':
+        return 'The verification ID is invalid.';
       default:
-        return 'Error al iniciar sesión. Intenta nuevamente.';
+        return 'An unexpected error occurred. Please try again.';
     }
   }
 
