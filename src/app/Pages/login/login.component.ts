@@ -98,7 +98,7 @@ export class LoginComponent {
   }
 
   onCancel() {
-    this.router.navigate(['/dashboard']); // Puedes cambiar '/' por la ruta que quieras
+    this.router.navigate(['/dashboard']);
   }
 
   get email() {
