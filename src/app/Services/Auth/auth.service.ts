@@ -16,7 +16,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUser = new BehaviorSubject<User | null>(null);
+  private currentUser = new BehaviorSubject<User | null | undefined>(undefined);
   user$ = this.currentUser.asObservable();
 
   constructor(private auth: Auth) {

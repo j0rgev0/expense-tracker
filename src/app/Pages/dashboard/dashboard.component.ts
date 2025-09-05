@@ -27,8 +27,8 @@ import { Router } from '@angular/router';
 export class DashboardComponent {
   transactionsListFiltered: Transaction[] = [];
   transactionsList: Transaction[] = [];
-  isLoggedIn = false;
   loading = true;
+  isLoggedIn = false;
 
   currentFilters: FilterState = {
     type: 'all',
@@ -40,7 +40,7 @@ export class DashboardComponent {
 
   constructor(
     private transactionService: TransactionService,
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router,
     public modalService: ModalService
   ) {
@@ -50,8 +50,12 @@ export class DashboardComponent {
     });
 
     this.authService.user$.subscribe(user => {
-      this.loading = false; 
-      this.isLoggedIn = user !== null;
+      if (user === undefined) {
+        this.loading = true;
+      } else {
+        this.loading = false;
+        this.isLoggedIn = user !== null;
+      }
     });
   }
 
