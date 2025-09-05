@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class AuthButtonComponent {
   @Output() action = new EventEmitter<void>();
-  @Input() text = '';
+  @Input() text!: string;
 
   onAction() {
     this.action.emit();
