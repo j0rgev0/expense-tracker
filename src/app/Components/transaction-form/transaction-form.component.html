@@ -1,11 +1,12 @@
 <section class="max-w-md mx-auto mt-6 px-4">
 
     <div class="border border-blue-600 rounded-lg flex overflow-hidden mb-6">
-        <div class="w-1/2 text-center py-2 font-semibold cursor-pointer" (click)="formType = 'income'"
+        <div class="w-1/2 text-center py-2 font-semibold cursor-pointer" (click)="formType = 'income'; errorMessage= ''"
             [ngClass]="{'bg-blue-600 text-white': formType === 'income', 'text-blue-600 bg-white' : formType === 'expense'}">
             Income
         </div>
-        <div class="w-1/2 text-center py-2 font-semibold cursor-pointer" (click)="formType = 'expense'"
+        <div class="w-1/2 text-center py-2 font-semibold cursor-pointer"
+            (click)="formType = 'expense'; errorMessage = ''"
             [ngClass]="{'bg-blue-600 text-white': formType === 'expense', 'text-blue-600 bg-white' : formType === 'income'}">
             Expense
         </div>

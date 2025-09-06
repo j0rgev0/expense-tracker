@@ -21,7 +21,7 @@ export class TransactionService {
   addTransaction(transaction: Transaction): void {
     const current = this.loadTransactions();
 
-    if (current.find(t => t.title === transaction.title)) {
+    if (current.find(t => t.title === transaction.title && t.type === transaction.type)) {
       throw new Error('Transaction already exists');
     }
 

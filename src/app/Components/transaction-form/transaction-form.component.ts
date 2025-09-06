@@ -63,9 +63,9 @@ export class TransactionFormComponent {
 
         console.log('Submitted data:', data);
         this.back.emit();
-      } catch (e) {
-        this.errorMessage = e + '';
-        console.error(e);
+      } catch (error: any) {
+        this.errorMessage = error.message;
+        console.error(error);
       }
     } else {
       this.validForm.markAllAsTouched();
