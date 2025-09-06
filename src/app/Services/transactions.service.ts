@@ -22,8 +22,7 @@ export class TransactionService {
     const current = this.loadTransactions();
 
     if (current.find(t => t.title === transaction.title)) {
-      console.error('Transaction already exists');
-      return;
+      throw new Error('Transaction already exists');
     }
 
     const updated = [...current, transaction];
@@ -41,8 +40,7 @@ export class TransactionService {
     const exists = current.some(t => t.id === id);
 
     if (!exists) {
-      console.error('Transaction does not exist');
-      return;
+      throw new Error('Transaction does not exist');
     }
 
     const updated = current.filter(t => t.id !== id);
