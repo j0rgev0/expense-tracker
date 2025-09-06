@@ -10,6 +10,7 @@ import {
 import { CommonModule, Location } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../Services/Auth/auth.service';
+import { doc, Firestore, setDoc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-signup',
@@ -26,10 +27,12 @@ export class SignupComponent {
     private fb: FormBuilder,
     private location: Location,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private firestore: Firestore
   ) {
     this.signupForm = this.fb.group(
       {
+        username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
         email: ['', [Validators.required, Validators.email, Validators.maxLength(254)]],
         password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(128)]],
         confirmPassword: ['', [Validators.required]]
@@ -45,7 +48,6 @@ export class SignupComponent {
     if (password && confirmPassword && password.value !== confirmPassword.value) {
       return { passwordMismatch: true };
     }
-
     return null;
   }
 
@@ -58,16 +60,25 @@ export class SignupComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
+    const usernameValue = this.username?.value ?? '';
     const emailValue = this.email?.value ?? '';
     const passwordValue = this.password?.value ?? '';
 
     try {
+      // 1. Crear usuario en Firebase Auth
       const userCredential = await this.authService.register(emailValue, passwordValue);
-      console.log('Signup exitoso:', userCredential.user);
+      const uid = userCredential.user.uid;
 
+      // 2. Guardar datos extra en Firestore con UID como id
+      await setDoc(doc(this.firestore, 'users', uid), {
+        usernameValue,
+        emailValue
+      });
+
+      console.log('Signup successful:', userCredential.user);
       this.router.navigate(['/dashboard']);
     } catch (error: any) {
-      console.error('Error en signup:', error);
+      console.error('Error in signup:', error);
       this.errorMessage = this.getErrorMessage(error.code);
     } finally {
       this.isLoading = false;
@@ -77,37 +88,37 @@ export class SignupComponent {
   private getErrorMessage(errorCode: string): string {
     switch (errorCode) {
       case 'auth/email-already-in-use':
-        return 'Este email ya está registrado. Intenta con otro email.';
+        return 'This email is already registered. Try with another email.';
       case 'auth/invalid-email':
-        return 'El formato del email es inválido.';
+        return 'The email format is invalid.';
       case 'auth/weak-password':
-        return 'La contraseña es muy débil. Elige una contraseña más segura.';
+        return 'The password is too weak. Choose a more secure password.';
       case 'auth/missing-password':
-        return 'Por favor ingresa una contraseña.';
+        return 'Please enter a password.';
       case 'auth/operation-not-allowed':
-        return 'Este método de registro no está permitido. Contacta al soporte.';
+        return 'This registration method is not allowed. Contact support.';
       case 'auth/too-many-requests':
-        return 'Demasiados intentos fallidos. Intenta más tarde.';
+        return 'Too many failed attempts. Try again later.';
       case 'auth/network-request-failed':
-        return 'Error de conexión. Verifica tu conexión a internet.';
+        return 'Connection error. Check your internet connection.';
       case 'auth/requires-recent-login':
-        return 'Por favor inicia sesión nuevamente para realizar esta acción.';
+        return 'Please log in again to perform this action.';
       case 'auth/credential-already-in-use':
-        return 'Esta credencial ya está vinculada a otra cuenta.';
+        return 'This credential is already linked to another account.';
       case 'auth/account-exists-with-different-credential':
-        return 'Ya existe una cuenta con un método de inicio de sesión diferente.';
+        return 'An account already exists with a different sign-in method.';
       case 'auth/popup-closed-by-user':
-        return 'El popup de registro fue cerrado antes de completar el proceso.';
+        return 'The registration popup was closed before completing the process.';
       case 'auth/cancelled-popup-request':
-        return 'Se abrieron múltiples popups. Intenta nuevamente.';
+        return 'Multiple popups were opened. Try again.';
       case 'auth/unauthorized-domain':
-        return 'Este dominio no está autorizado para operaciones OAuth.';
+        return 'This domain is not authorized for OAuth operations.';
       case 'auth/invalid-verification-code':
-        return 'El código de verificación es inválido o ha expirado.';
+        return 'The verification code is invalid or has expired.';
       case 'auth/invalid-verification-id':
-        return 'El ID de verificación es inválido.';
+        return 'The verification ID is invalid.';
       default:
-        return 'Ocurrió un error inesperado. Intenta nuevamente.';
+        return 'An unexpected error occurred. Try again.';
     }
   }
 
@@ -115,14 +126,15 @@ export class SignupComponent {
     this.location.back();
   }
 
+  get username() {
+    return this.signupForm.get('username');
+  }
   get email() {
     return this.signupForm.get('email');
   }
-
   get password() {
     return this.signupForm.get('password');
   }
-
   get confirmPassword() {
     return this.signupForm.get('confirmPassword');
   }

@@ -12,15 +12,29 @@
 
         <form [formGroup]="signupForm" (ngSubmit)="onSignup()" class="space-y-5">
             <div>
+                <label for="username" class="block text-sm font-medium text-gray-700">
+                    Username
+                </label>
+                <input id="username" type="text" formControlName="username" placeholder="Enter your username"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-600 focus:border-blue-600 outline-none" />
+
+                <small class="text-red-500 text-xs" *ngIf="username?.touched && username?.invalid">
+                    <span *ngIf="username?.hasError('required')">Username is required</span>
+                    <span *ngIf="username?.hasError('minlength')">Minimum 3 characters</span>
+                    <span *ngIf="username?.hasError('maxlength')">Username is too long</span>
+                </small>
+            </div>
+
+            <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">
                     Email
                 </label>
                 <input id="email" type="email" formControlName="email" placeholder="Enter your email"
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-600 focus:border-blue-600 outline-none" />
                 <small class="text-red-500 text-xs" *ngIf="email?.touched && email?.invalid">
-                    <span *ngIf="email?.hasError('required')">El email es requerido</span>
-                    <span *ngIf="email?.hasError('email')">Formato de email inválido</span>
-                    <span *ngIf="email?.hasError('maxlength')">El email es demasiado largo</span>
+                    <span *ngIf="email?.hasError('required')">Email is required</span>
+                    <span *ngIf="email?.hasError('email')">Invalid email format</span>
+                    <span *ngIf="email?.hasError('maxlength')">Email is too long</span>
                 </small>
             </div>
 
@@ -31,9 +45,9 @@
                 <input id="password" type="password" formControlName="password" placeholder="Enter your password"
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-600 focus:border-blue-600 outline-none" />
                 <small class="text-red-500 text-xs" *ngIf="password?.touched && password?.invalid">
-                    <span *ngIf="password?.hasError('required')">La contraseña es requerida</span>
-                    <span *ngIf="password?.hasError('minlength')">Mínimo 6 caracteres</span>
-                    <span *ngIf="password?.hasError('maxlength')">La contraseña es demasiado larga</span>
+                    <span *ngIf="password?.hasError('required')">Password is required</span>
+                    <span *ngIf="password?.hasError('minlength')">Minimum 6 characters</span>
+                    <span *ngIf="password?.hasError('maxlength')">Password is too long</span>
                 </small>
             </div>
 
@@ -45,9 +59,9 @@
                     placeholder="Confirm your password"
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-600 focus:border-blue-600 outline-none" />
                 <small class="text-red-500 text-xs" *ngIf="confirmPassword?.touched && confirmPassword?.invalid">
-                    <span *ngIf="confirmPassword?.hasError('required')">La confirmación de contraseña es
-                        requerida</span>
-                    <span *ngIf="confirmPassword?.hasError('passwordMismatch')">Las contraseñas no coinciden</span>
+                    <span *ngIf="confirmPassword?.hasError('required')">Password confirmation is
+                        required</span>
+                    <span *ngIf="confirmPassword?.hasError('passwordMismatch')">Passwords do not match</span>
                 </small>
             </div>
 
