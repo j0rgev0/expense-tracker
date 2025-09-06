@@ -1,6 +1,6 @@
 <section class="pt-4">
-  <div class="flex items-center">
-    <div class="">
+  <div class="flex items-center justify-center">
+    <div>
       <span class="text-7xl mt-6 pr-5 font-bold"
         [ngClass]="{ 'text-red-600': totalAmount < 0, 'text-green-600': totalAmount > 0 }">
         {{ totalAmount | currency }}

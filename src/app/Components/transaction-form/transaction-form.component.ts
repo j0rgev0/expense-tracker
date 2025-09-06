@@ -14,6 +14,7 @@ import { Transaction } from '../../Interface/Transaction';
 })
 export class TransactionFormComponent {
   @Output() back = new EventEmitter<void>();
+  errorMessage = '';
 
   constructor(
     private fb: FormBuilder,
@@ -47,19 +48,25 @@ export class TransactionFormComponent {
 
   onSubmit() {
     if (this.validForm.valid) {
-      const data = this.validForm.value;
-      const transaction: Transaction = {
-        id: crypto.randomUUID(),
-        type: this.formType,
-        title: data.title!,
-        amount: data.amount!,
-        category: data.category!,
-        date: data.date!
-      };
+      try {
+        const data = this.validForm.value;
+        const transaction: Transaction = {
+          id: crypto.randomUUID(),
+          type: this.formType.toLowerCase(),
+          title: data.title!.toLowerCase(),
+          amount: data.amount!,
+          category: data.category!.toLowerCase(),
+          date: data.date!
+        };
 
-      this.transactionService.addTransaction(transaction);
-      console.log('Submitted data:', data);
-      this.back.emit();
+        this.transactionService.addTransaction(transaction);
+
+        console.log('Submitted data:', data);
+        this.back.emit();
+      } catch (error: any) {
+        this.errorMessage = error.message;
+        console.error(error);
+      }
     } else {
       this.validForm.markAllAsTouched();
     }
