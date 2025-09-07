@@ -1,12 +1,13 @@
 import { UUID } from 'crypto';
 
 export interface Transaction {
-  id: UUID;
+  id?: UUID;
   category: string;
   title: string;
   amount: number;
   type: string;
   date: string;
+  createdAt?: Date;
 }
 
 export type IncomesCategory =
