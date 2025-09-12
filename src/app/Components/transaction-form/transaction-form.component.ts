@@ -5,6 +5,8 @@ import { CATEGORIES, EXPENSECAT, INCOMECAT } from '../../utils/consts';
 import { allowedValuesValidatos } from '../../utils/validateForm';
 import { TransactionService } from '../../Services/transactions.service';
 import { Transaction } from '../../Interface/Transaction';
+import { AuthService } from '../../Services/Auth/auth.service';
+import { TransactionsFirebaseService } from '../../Services/transactions-firebase.service';
 
 @Component({
   selector: 'app-transaction-form',
@@ -15,11 +17,22 @@ import { Transaction } from '../../Interface/Transaction';
 export class TransactionFormComponent {
   @Output() back = new EventEmitter<void>();
   errorMessage = '';
+  useruid: string = '';
+  isLoggedIn = false;
 
   constructor(
     private fb: FormBuilder,
-    private transactionService: TransactionService
-  ) {}
+    public authService: AuthService,
+    private transactionService: TransactionService,
+    private transactionFirebaseService: TransactionsFirebaseService
+  ) {
+    this.authService.user$.subscribe(user => {
+      this.isLoggedIn = user !== null;
+      if (user !== null && user !== undefined) {
+        this.useruid = user.uid;
+      }
+    });
+  }
 
   private _formType: 'income' | 'expense' = 'income';
 
@@ -59,7 +72,11 @@ export class TransactionFormComponent {
           date: data.date!
         };
 
-        this.transactionService.addTransaction(transaction);
+        if (!this.isLoggedIn) {
+          this.transactionService.addTransaction(transaction);
+        } else {
+          this.transactionFirebaseService.addTransaction(this.useruid, transaction);
+        }
 
         console.log('Submitted data:', data);
         this.back.emit();

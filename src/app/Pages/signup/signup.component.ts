@@ -65,11 +65,9 @@ export class SignupComponent {
     const passwordValue = this.password?.value ?? '';
 
     try {
-      // 1. Crear usuario en Firebase Auth
       const userCredential = await this.authService.register(emailValue, passwordValue);
       const uid = userCredential.user.uid;
 
-      // 2. Guardar datos extra en Firestore con UID como id
       await setDoc(doc(this.firestore, 'users', uid), {
         usernameValue,
         emailValue
@@ -121,6 +119,9 @@ export class SignupComponent {
         return 'An unexpected error occurred. Try again.';
     }
   }
+
+
+    
 
   onCancel() {
     this.location.back();
