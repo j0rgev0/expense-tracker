@@ -11,6 +11,7 @@ import { ModalService } from '../../Services/modal.service';
 import { AuthService } from '../../Services/Auth/auth.service';
 import { Router } from '@angular/router';
 import { AuthButtonComponent } from '../../Components/Auth/auth-button/auth-button.component';
+import { TransactionsFirebaseService } from '../../Services/transactions-firebase.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,6 +31,7 @@ export class DashboardComponent {
   transactionsListFiltered: Transaction[] = [];
   transactionsList: Transaction[] = [];
   isLoggedIn = false;
+  useruid = '';
 
   currentFilters: FilterState = {
     type: 'all',
@@ -41,6 +43,7 @@ export class DashboardComponent {
 
   constructor(
     private transactionService: TransactionService,
+    private transactionFirebaseService: TransactionsFirebaseService,
     public authService: AuthService,
     private router: Router,
     public modalService: ModalService
@@ -52,6 +55,14 @@ export class DashboardComponent {
 
     this.authService.user$.subscribe(user => {
       this.isLoggedIn = user !== null;
+      if (user !== null && user !== undefined) {
+        this.useruid = user.uid;
+        this.transactionFirebaseService.getTransaction(this.useruid);
+        this.transactionFirebaseService.transactions$.subscribe(transactions => {
+          this.transactionsList = transactions;
+          this.applyFilters();
+        });
+      }
     });
   }
 
